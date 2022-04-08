@@ -1,17 +1,44 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
+    <link href="https://cdn.bootcdn.net/ajax/libs/element-plus/2.1.7/index.min.css" rel="stylesheet">
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+        
+        #app {
+            width: 100%;
+            height: 100%;
+        }
+        
+        body {
+            margin: 0;
+            height: 100%;
+        }
+    </style>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
+
+<body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-  </body>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.31/vue.runtime.global.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-plus/2.1.7/index.full.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue-router/4.0.14/vue-router.global.min.js"></script>
+
+</body>
+
 </html>

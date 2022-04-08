@@ -1,10 +1,26 @@
 <template>
-  <div>2</div>
+  <div :style="{'min-height':height}">2</div>
 </template>
 
 <script>
 export default {
-
+  data() {
+    return {
+      height: "",
+    };
+  },
+  methods: {
+    getheight() {
+      this.height = document.body.clientHeight - 160 + "px";
+    },
+  },
+  mounted() {
+    this.getheight();
+    window.addEventListener("resize", this.getheight);
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.getheight);
+  },
 }
 </script>
 

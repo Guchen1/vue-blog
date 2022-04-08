@@ -22,7 +22,14 @@ const routes = [{
         name: "doc",
         component: () =>
             import ("../views/DocP.vue"),
+    },
+    {
+        path: "/:catchAll(.*)",
+        name: "404",
+        component: () =>
+            import ("../views/NF.vue"),
     }
+
 ];
 
 const router = createRouter({

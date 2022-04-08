@@ -1,10 +1,10 @@
 <template>
-  <div class='r' :style="{'min-height':height}">1</div>
+  <div class='root' :style="{height:height,'line-height':height}" style='text-align:center'>404 Not Found</div>
 </template>
 
 <script>
 export default {
-    data() {
+  data() {
     return {
       height: "",
     };
@@ -21,7 +21,7 @@ export default {
   unmounted() {
     window.removeEventListener("resize", this.getheight);
   },
-}
+};
 </script>
 
 <style>

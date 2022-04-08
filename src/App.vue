@@ -14,7 +14,7 @@
             class="header"
             :class="{ active: path == '/' }"
             ref="to"
-            @click="hashc"
+            
             ><router-link class="el-link gu" style="font-size: 16px" to="/"
               >主页</router-link
             ></el-col
@@ -25,7 +25,7 @@
             class="header"
             ref="todoc"
             :class="{ active: path == '/doc' }"
-            @click="hashc"
+            
             ><router-link
               class="el-link gu --el-font-size-medium"
               style="font-size: 16px"
@@ -39,7 +39,7 @@
             class="header"
             ref="tosetting"
             :class="{ active: path == '/setting' }"
-            @click="hashc"
+            
             ><router-link
               class="el-link gu --el-font-size-medium"
               style="font-size: 16px"
@@ -53,7 +53,7 @@
             class="header"
             ref="tologin"
             :class="{ active: path == '/login' }"
-            @click="hashc"
+            
             ><router-link
               class="el-link gu --el-font-size-medium"
               style="font-size: 16px"
@@ -83,6 +83,18 @@
 
 <script>
 //import { Edit } from '@element-plus/icons-vue'
+var _wr = function(type) {
+   var orig = history[type];
+   return function() {
+       var rv = orig.apply(this, arguments);
+      var e = new Event(type);
+       e.arguments = arguments;
+       window.dispatchEvent(e);
+       return rv;
+   };
+};
+ history.pushState = _wr('pushState');
+ history.replaceState = _wr('replaceState');
 export default {
   components: {},
   name: "App",
@@ -97,7 +109,6 @@ export default {
       this.height = document.body.clientHeight - 160 + "px";
     },
     hashc() {
-      setTimeout(() => {
         this.path = window.location.href;
         this.path = this.path
           .substring(7)
@@ -111,16 +122,19 @@ export default {
         if (this.path == "") {
           this.path = "/";
         }
-      }, 100);
     },
   },
   mounted() {
-    this.getheight();
     this.hashc();
+    this.getheight();
+    window.addEventListener('popstate', this.hashc);
     window.addEventListener("resize", this.getheight);
+    window.addEventListener('pushState', this.hashc);
   },
   unmounted() {
     window.removeEventListener("resize", this.getheight);
+    window.removeEventListener('popstate', this.hashc);
+    window.removeEventListener('pushState', this.hashc);
   },
 };
 </script>
@@ -140,7 +154,7 @@ export default {
 :root {
 }
 .header {
-  border-bottom: 1px solid var(--el-border-color);
+  border-bottom: 2px solid var(--el-border-color);
 
   text-align: center;
 }
@@ -155,6 +169,6 @@ export default {
   bottom: 3px;
 }
 .active {
-  border-bottom: 2px solid var(--el-color-primary);
+  border-bottom: 3px solid var(--el-color-primary);
 }
 </style>

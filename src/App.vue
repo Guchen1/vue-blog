@@ -29,7 +29,7 @@
             ><router-link
               class="el-link gu --el-font-size-medium"
               style="font-size: 16px"
-              to="/doc"
+              :to="{ name:'doc',query:{PassageId:1} }"
               >文章</router-link
             ></el-col
           ><el-col
@@ -117,6 +117,12 @@ export default {
           this.path = this.path.substring(
             0,
             this.path.substring(1).search("/") + 1
+          );
+        }
+        if (this.path.search("\\?") != -1) { 
+          this.path = this.path.substring(
+            0,
+            this.path.search("\\?") 
           );
         }
         if (this.path == "") {

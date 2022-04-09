@@ -1,15 +1,19 @@
 <template>
-  <div>2234</div>
+  
+  <div :style="{ 'min-height': height }">2234</div>
+
 </template>
 
 <script>
 export default {
-  props: ["ready", "height", "path"],
+  props: ['loading', "ready", "height", "path"],
   methods: {
     
   },
   mounted() {
-    
+    setTimeout(() => {
+      this.$emit('loaded');
+    }, 1000);
   },
 };
 </script>

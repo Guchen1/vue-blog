@@ -1,12 +1,28 @@
 <template>
   <div :style="{ 'min-height': height }">
-    <div v-if="!ready">2</div>
-    <post-show
-      v-if="ready"
-      :ready="ready"
-      :height="height"
-      :path="path"
-    ></post-show>
+    <transition name="el-fade-in">
+      <loading-page v-if="loading"></loading-page>
+    </transition>
+    <transition name="el-fade-in">
+      <doc-main
+        v-if="!ready"
+        v-show="!loading"
+        :ready="ready"
+        @loaded="load"
+        :height="height"
+      ></doc-main>
+    </transition>
+    <transition name="el-fade-in">
+      <post-show
+        @loaded="load"
+        v-show="ready && !loading"
+        v-if="path != undefined"
+        :loading="loading"
+        :ready="ready"
+        :height="height"
+        :path="path"
+      ></post-show>
+    </transition>
   </div>
 </template>
 
@@ -23,16 +39,21 @@ var _wr = function (type) {
 };
 history.pushState = _wr("pushState");
 history.replaceState = _wr("replaceState");
+import LoadingPage from "../components/LoadingPage.vue";
+import DocMain from "../components/DocMain.vue";
 import PostShow from "../components/PostShow.vue";
 export default {
   components: {
     PostShow,
+    LoadingPage,
+    DocMain,
   },
   data() {
     return {
       height: "",
       ready: false,
       path: this.$route.query.PassageId,
+      loading: true,
     };
   },
   methods: {
@@ -40,28 +61,37 @@ export default {
       this.height = document.body.clientHeight - 160 + "px";
     },
     routepath() {
+      console.log(this.$route.query.PassageId);
       this.path = this.$route.query.PassageId;
       var qlist = ["1", "qq"];
-      if (qlist.find((element) => element == this.path) == undefined) {
+      if (
+        qlist.find((element) => element == this.path) == undefined &&
+        this.path != ''&&this.path != undefined
+      ) {
         this.$router.push("/passagenotdound");
         return;
       }
-      if (this.path != undefined) {
+      if (this.path != undefined&&this.path!='') {
         this.ready = true;
       }
+    },
+    load() {
+      this.loading = false;
+    },
+  },
+  watch: {
+    $route() {
+      this.loading = true;
+      this.routepath();
     },
   },
   mounted() {
     this.getheight();
     this.routepath();
     window.addEventListener("resize", this.getheight);
-    window.addEventListener("pushstate", this.routepath);
-    window.addEventListener("popstate", this.routepath);
   },
   unmounted() {
     window.removeEventListener("resize", this.getheight);
-    window.removeEventListener("pushstate", this.routepath);
-    window.removeEventListener("popstate", this.routepath);
   },
 };
 </script>

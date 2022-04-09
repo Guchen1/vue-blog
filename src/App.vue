@@ -130,17 +130,18 @@ export default {
         }
     },
   },
+  watch: {
+    $route() {
+      this.hashc();
+    },
+  },
   mounted() {
     this.hashc();
     this.getheight();
-    window.addEventListener('popstate', this.hashc);
     window.addEventListener("resize", this.getheight);
-    window.addEventListener('pushState', this.hashc);
   },
   unmounted() {
     window.removeEventListener("resize", this.getheight);
-    window.removeEventListener('popstate', this.hashc);
-    window.removeEventListener('pushState', this.hashc);
   },
 };
 </script>

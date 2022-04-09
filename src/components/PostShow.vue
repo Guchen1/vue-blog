@@ -11,9 +11,14 @@ export default {
     
   },
   mounted() {
-    setTimeout(() => {
+    
       this.$emit('loaded');
-    }, 1000);
+
+  },
+  updated() {
+
+      this.$emit('loaded');
+    
   },
 };
 </script>

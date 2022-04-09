@@ -1,32 +1,40 @@
 <template>
-  <div :style="{ 'min-height': height+'px' }">
-    <transition name="el-fade-in">
-      <loading-page v-if="loading"></loading-page>
+  <div :style="{ 'min-height': height + 'px' }">
+    <transition name='scale'>
+    <Suspense  v-if="!ready">
+      <template #fallback>
+        <loading-page ></loading-page>
+      </template>
+      <template #default>
+
+          <doc-main
+            :ready="ready"
+            :height="height"
+          ></doc-main>
+
+      </template>
+    </Suspense>
     </transition>
-    <transition name="el-fade-in">
-      <doc-main
-        v-if="!ready"
-        v-show="!loading"
-        :ready="ready"
-        @loaded="load"
-        :height="height"
-      ></doc-main>
-    </transition>
-    <transition name="el-fade-in">
-      <post-show
-        @loaded="load"
-        v-show="ready && !loading"
-        v-if="path != undefined"
-        :loading="loading"
-        :ready="ready"
-        :height="height"
-        :path="path"
-      ></post-show>
+    <transition name='scale'>
+    <Suspense v-if="ready">
+      <template #fallback>
+        <loading-page ></loading-page>
+      </template>
+      <template #default>
+          <post-show
+            :loading="loading"
+            :ready="ready"
+            :height="height"
+            :path="path"
+          ></post-show>
+      </template>
+    </Suspense>
     </transition>
   </div>
 </template>
 
 <script>
+import { defineAsyncComponent } from "vue";
 var _wr = function (type) {
   var orig = history[type];
   return function () {
@@ -40,13 +48,15 @@ var _wr = function (type) {
 history.pushState = _wr("pushState");
 history.replaceState = _wr("replaceState");
 import LoadingPage from "../components/LoadingPage.vue";
-import DocMain from "../components/DocMain.vue";
-import PostShow from "../components/PostShow.vue";
+const PostShow = defineAsyncComponent(() =>
+  import("../components/PostShow.vue")
+);
+const DocMain = defineAsyncComponent(() => import("../components/DocMain.vue"));
 export default {
   components: {
     PostShow,
-    LoadingPage,
     DocMain,
+    LoadingPage,
   },
   data() {
     return {
@@ -66,12 +76,13 @@ export default {
       var qlist = ["1", "qq"];
       if (
         qlist.find((element) => element == this.path) == undefined &&
-        this.path != ''&&this.path != undefined
+        this.path != "" &&
+        this.path != undefined
       ) {
         this.$router.push("/passagenotdound");
         return;
       }
-      if (this.path != undefined&&this.path!='') {
+      if (this.path != undefined && this.path != "") {
         this.ready = true;
       }
     },
@@ -81,7 +92,7 @@ export default {
   },
   watch: {
     $route() {
-      this.ready=false;
+      this.ready = false;
       this.loading = true;
       this.routepath();
     },
@@ -98,4 +109,14 @@ export default {
 </script>
 
 <style>
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.5s ease;
+}
+
+.scale-enter-from,
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
 </style>

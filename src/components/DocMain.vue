@@ -8,22 +8,32 @@
         >Aside</el-aside
       >
       <el-container>
-        <el-header style="padding-top: 20px;padding-right: 8%">
-            <el-input v-model="input" placeholder="输入以搜索" />
+        <el-header style="padding-top: 20px; padding-right: 8%">
+          <el-row>
+            <el-col :span="18" :xs="16">
+              <el-input v-model="input" placeholder="输入以搜索"
+            /></el-col>
+            <el-col :span="6" :xs="8">
+              <el-select v-model="sort" class="m-2" placeholder="Select" style="width:100%">
+                <el-option label="时间顺序" value="from" />
+                <el-option label="时间倒序" value="to" />
+              </el-select>
+            </el-col>
+          </el-row>
         </el-header>
-        <el-scrollbar :max-height=" height - 60 + 'px'">
-        <el-main
-          :style="{ 'min-height': height - 60 + 'px' }"
-          style="padding-right: 8%"
+        <el-scrollbar :max-height="height - 60 + 'px'">
+          <el-main
+            :style="{ 'min-height': height - 60 + 'px' }"
+            style="padding-right: 8%"
           >
-          <view-card
-            v-for="passage in passages"
-            :key="passage.id"
-            :id="passage.id"
-            :title="passage.title"
-            :content="passage.content"
-          ></view-card
-        ></el-main>
+            <view-card
+              v-for="passage in passages"
+              :key="passage.id"
+              :id="passage.id"
+              :title="passage.title"
+              :content="passage.content"
+            ></view-card
+          ></el-main>
         </el-scrollbar>
       </el-container>
     </el-container>
@@ -33,9 +43,13 @@
 <script>
 import ViewCard from "./ViewCard.vue";
 export default {
+  components: {
+    ViewCard,
+  },
   data() {
     return {
       input: "",
+      sort: "",
       passages: [
         {
           id: 1,
@@ -90,15 +104,11 @@ export default {
       ],
     };
   },
-  components: {
-    "view-card": ViewCard,
-  },
   props: ["ready", "height"],
   mounted() {
-    setTimeout(() => {
       this.$emit("loaded");
-    }, 1000);
   },
+
 };
 </script>
 

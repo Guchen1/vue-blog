@@ -14,7 +14,7 @@
             class="header"
             :class="{ active: path == '/' }"
             ref="to"
-            ><router-link class="el-link gu" style="font-size: 16px" to="/"
+            ><router-link class="el-link gu" style="font-size: 16px;width:100%" to="/" 
               >主页</router-link
             ></el-col
           ><el-col
@@ -26,7 +26,7 @@
             :class="{ active: path == '/doc' }"
             ><router-link
               class="el-link gu --el-font-size-medium"
-              style="font-size: 16px"
+              style="font-size: 16px;width:100%"
               :to="{ name: 'doc', query: { } }"
               >文章</router-link
             ></el-col
@@ -39,7 +39,7 @@
             :class="{ active: path == '/setting' }"
             ><router-link
               class="el-link gu --el-font-size-medium"
-              style="font-size: 16px"
+              style="font-size: 16px;width:100%"
               to="/setting"
               >设置</router-link
             ></el-col
@@ -52,7 +52,7 @@
             :class="{ active: path == '/login' }"
             ><router-link
               class="el-link gu --el-font-size-medium"
-              style="font-size: 16px"
+              style="font-size: 16px;width:100%"
               to="/login"
               >登录</router-link
             ></el-col
@@ -97,12 +97,12 @@ export default {
   data() {
     return {
       path: window.location.href,
-      height: document.body.clientHeight - 160 + "px",
+      height: document.body.clientHeight - 160 +'px',
     };
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 160 + "px";
+      this.height = document.body.clientHeight - 160+'px' ;
     },
     hashc() {
       this.path = window.location.href;

@@ -1,34 +1,29 @@
 <template>
   <div :style="{ 'min-height': height + 'px' }">
-    <transition name='scale'>
-    <Suspense  v-if="!ready">
-      <template #fallback>
-        <loading-page ></loading-page>
-      </template>
-      <template #default>
-
-          <doc-main
-            :ready="ready"
-            :height="height"
-          ></doc-main>
-
-      </template>
-    </Suspense>
+    <transition v-if="!ready" name="scale">
+      <Suspense >
+        <template #fallback>
+          <loading-page></loading-page>
+        </template>
+        <template #default>
+          <doc-main :ready="ready" :height="height"></doc-main>
+        </template>
+      </Suspense>
     </transition>
-    <transition name='scale'>
-    <Suspense v-if="ready">
-      <template #fallback>
-        <loading-page ></loading-page>
-      </template>
-      <template #default>
+    <transition v-if="ready"  name="scale">
+      <Suspense >
+        <template #fallback>
+          <loading-page></loading-page>
+        </template>
+        <template #default>
           <post-show
             :loading="loading"
             :ready="ready"
             :height="height"
             :path="path"
           ></post-show>
-      </template>
-    </Suspense>
+        </template>
+      </Suspense>
     </transition>
   </div>
 </template>

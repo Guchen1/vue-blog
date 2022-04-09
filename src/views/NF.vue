@@ -17,6 +17,9 @@ export default {
     return {
       height: 0,
       width: document.body.clientWidth - 40,
+      time:setTimeout(() => {
+      this.$router.push('/');
+    }, 3000)
     };
   },
   methods: {
@@ -31,14 +34,13 @@ export default {
     this.getheight();
     window.addEventListener("resize", this.getheight);
     window.addEventListener("resize", this.getwidth);
-    setTimeout(() => {
-      this.$router.push('/');
-    }, 3000);
+    
   },
 
   unmounted() {
     window.removeEventListener("resize", this.getheight);
     window.removeEventListener("resize", this.getwidth);
+    clearTimeout(this.time);
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ 'min-height': height }">
+  <div :style="{ 'min-height': height+'px' }">
     <transition name="el-fade-in">
       <loading-page v-if="loading"></loading-page>
     </transition>
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 160 + "px";
+      this.height = document.body.clientHeight - 160;
     },
     routepath() {
       console.log(this.$route.query.PassageId);
@@ -81,6 +81,7 @@ export default {
   },
   watch: {
     $route() {
+      this.ready=false;
       this.loading = true;
       this.routepath();
     },

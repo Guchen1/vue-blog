@@ -1,6 +1,6 @@
 <template>
   
-  <div :style="{ 'min-height': height }">2234</div>
+  <div :style="{ 'min-height': height+'px' }">2234</div>
 
 </template>
 

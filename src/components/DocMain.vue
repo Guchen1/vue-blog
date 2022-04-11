@@ -145,6 +145,13 @@ export default {
       this.mainwidth=window.innerWidth>800?800:window.innerWidth;
     });
   },
+  unmounted() {
+    window.removeEventListener("resize", () => {
+      this.width = window.innerWidth;
+      this.widthp = document.getElementById('main').offsetWidth;
+      this.mainwidth=window.innerWidth>800?800:window.innerWidth;
+    });
+  },
 };
 </script>
 

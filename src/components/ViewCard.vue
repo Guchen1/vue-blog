@@ -10,7 +10,7 @@
             <el-skeleton-item variant="image"  class="img" />
           </template>
           <template #default>
-            <img  src="../assets/p1.jpg" class="img" />
+            <el-image lazy   :src="img.src" class="img"  fit='cover' />
           </template>
         </el-skeleton>
 

@@ -33,11 +33,11 @@
           </el-row>
         </el-header>
         <el-main
-          :style="{ 'min-height': height - 60 + 'px' ,'max-width':mainwidth-40+'px'}"
-          style="margin-right:-20px;"
+          :style="{ 'min-height': height - 60 + 'px' ,'max-width':mainwidth+'px'}"
+          style="padding-bottom:0px!important;"
           id='main'
         >
-          <el-scrollbar :max-height="height - 100 + 'px'" style="max-width: 800px;padding-right:20px">
+          <el-scrollbar :max-height="height - 80 + 'px'" style="max-width: 800px;padding-right:20px">
             
               <view-card
                 style="max-width: 800px"
@@ -151,5 +151,8 @@ export default {
 <style>
 input {
   margin-right: 5px;
+}
+.el-main{
+  padding-bottom: 0px;
 }
 </style>

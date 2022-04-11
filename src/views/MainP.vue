@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 160 + "px";
+      this.height = document.body.clientHeight - 140 + "px";
     },
   },
   mounted() {
@@ -25,5 +25,7 @@ export default {
 </script>
 
 <style>
-
+.el-main{
+  padding-bottom: 0px;
+}
 </style>

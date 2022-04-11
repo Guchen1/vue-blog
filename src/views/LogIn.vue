@@ -13,7 +13,7 @@ export default defineComponent({
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 160 + "px";
+      this.height = document.body.clientHeight - 140 + "px";
     },
   },
   mounted() {
@@ -28,5 +28,7 @@ export default defineComponent({
 </script>
 
 <style>
-
+.el-main{
+  padding-bottom: 0px;
+}
 </style>

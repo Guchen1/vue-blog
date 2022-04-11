@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 160;
+      this.height = document.body.clientHeight - 140;
     },
     routepath() {
       this.path = this.$route.query.PassageId;
@@ -116,5 +116,8 @@ export default {
 .scale-leave-to {
   opacity: 0;
   transform: scale(0.9);
+}
+.el-main{
+  padding-bottom: 0px;
 }
 </style>

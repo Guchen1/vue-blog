@@ -97,12 +97,12 @@ export default {
   data() {
     return {
       path: window.location.href,
-      height: document.body.clientHeight - 160 +'px',
+      height: document.body.clientHeight - 140 +'px',
     };
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 160+'px' ;
+      this.height = document.body.clientHeight - 140+'px' ;
     },
     hashc() {
       this.path = window.location.href;
@@ -170,5 +170,8 @@ export default {
 }
 .active {
   border-bottom: 3px solid var(--el-color-primary);
+}
+.el-main{
+  padding-bottom: 0px;
 }
 </style>

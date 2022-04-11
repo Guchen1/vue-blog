@@ -1,29 +1,33 @@
 <template>
   <div :style="{ 'min-height': height + 'px' }">
-    <transition v-if="!ready" name="scale">
-      <Suspense >
-        <template #fallback>
-          <loading-page></loading-page>
-        </template>
-        <template #default>
-          <doc-main :ready="ready" :height="height"></doc-main>
-        </template>
-      </Suspense>
-    </transition>
-    <transition v-if="ready"  name="scale">
-      <Suspense >
-        <template #fallback>
-          <loading-page></loading-page>
-        </template>
-        <template #default>
-          <post-show
-            :loading="loading"
-            :ready="ready"
-            :height="height"
-            :path="path"
-          ></post-show>
-        </template>
-      </Suspense>
+    <transition name="scale">
+      <div>
+        <transition v-if="!ready" name="scale">
+          <Suspense>
+            <template #fallback>
+              <loading-page></loading-page>
+            </template>
+            <template #default>
+              <doc-main :ready="ready" :height="height"></doc-main>
+            </template>
+          </Suspense>
+        </transition>
+        <transition v-if="ready" name="scale">
+          <Suspense>
+            <template #fallback>
+              <loading-page></loading-page>
+            </template>
+            <template #default>
+              <post-show
+                :loading="loading"
+                :ready="ready"
+                :height="height"
+                :path="path"
+              ></post-show>
+            </template>
+          </Suspense>
+        </transition>
+      </div>
     </transition>
   </div>
 </template>
@@ -66,7 +70,6 @@ export default {
       this.height = document.body.clientHeight - 160;
     },
     routepath() {
-      console.log(this.$route.query.PassageId);
       this.path = this.$route.query.PassageId;
       var qlist = ["1", "qq"];
       if (

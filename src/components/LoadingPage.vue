@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 160;
+      this.height = document.body.clientHeight - 140;
     },
     getwidth() {
       this.width = document.body.clientWidth - 40;

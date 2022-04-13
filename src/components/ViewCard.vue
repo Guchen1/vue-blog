@@ -5,25 +5,31 @@
       style="text-decoration: none"
     >
       <el-card shadow="hover" class="box-card" style="margin-bottom: 10px">
-        <el-skeleton style="width: 100%" animated :loading='!loaded'>
+        <el-skeleton style="width: 100%" animated :loading="!loaded">
           <template #template>
-            <el-skeleton-item variant="image"  class="img" />
+            <el-skeleton-item variant="image" class="img" />
           </template>
           <template #default>
-            <el-image lazy   :src="img.src" class="img"  fit='cover' />
+            <el-image lazy :src="img.src" class="img" fit="cover" />
           </template>
         </el-skeleton>
-
-        <div class="content">
-          <h3 class="title">{{ title }}</h3>
-          <p class="description">{{ content }}</p>
-          <div>
-            <el-icon :size="15">
-              <calendar />
-            </el-icon>
-            <div class="time">{{ time }}</div>
-          </div>
-        </div>
+        <el-skeleton style="width: 100%" animated :loading="!load">
+          <template #template>
+            <el-skeleton :rows="2" />
+          </template>
+          <template #default>
+            <div class="content">
+              <h3 class="title">{{ title }}</h3>
+              <p class="description">{{ summary }}</p>
+              <div>
+                <el-icon :size="15">
+                  <calendar />
+                </el-icon>
+                <div class="time">{{ time }}</div>
+              </div>
+            </div>
+          </template>
+        </el-skeleton>
       </el-card>
     </router-link>
   </div>
@@ -37,20 +43,18 @@ export default {
   },
   data() {
     return {
-      img:new Image(),
+      img: new Image(),
       loaded: false,
     };
   },
-  methods: {
-
-  },
+  methods: {},
   created() {
     this.img.src = require("../assets/p1.jpg");
     this.img.onload = () => {
-          this.loaded = true;
-        }
+      this.loaded = true;
+    };
   },
-  props: ["id", "title", "content", "time"],
+  props: ["id", "title", "summary", "time", "load"],
 };
 </script>
 

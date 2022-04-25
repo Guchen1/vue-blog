@@ -155,13 +155,14 @@ export default {
 }
 .header {
   border-bottom: 2px solid var(--el-border-color);
-
+  height:60px;
   text-align: center;
 }
 .text {
 }
 .center {
   line-height: 60px;
+  height:60px;
   font-size: 16px !important;
 }
 .gu {

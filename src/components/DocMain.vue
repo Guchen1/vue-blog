@@ -2,12 +2,40 @@
   <div :style="{ 'min-height': height + 'px' }">
     <el-container>
       <el-aside
-        v-if="width >= 768"
-        :style="{ 'min-height': height - 60 + 'px' }"
-        width="20%"
-        style="margin-left: 10%; padding-top: 20px"
-        >Aside</el-aside
-      >
+        v-if="width >= 820"
+        :style="{
+          'min-height': height - 60 + 'px',
+          'margin-left': width >= 1200 ? '10%' : '0%',
+          width: width >= 1203 ? '20%' : '30%',
+        }"
+        style="margin-left: 5%; padding-top: 20px"
+        ><el-space wrap
+          ><div style="margin-top: 70px">
+            分类:
+            <el-checkbox-group v-model="checkList">
+              <el-checkbox label="Option A" />
+              <el-checkbox label="Option B" />
+              <el-checkbox label="Option C" />
+            </el-checkbox-group>
+          </div>
+          <div></div>
+          <el-space direction="vertical" style="margin-top: 70px">
+            <div class="block">
+              <span class="demonstration">起始日期:</span>
+              <el-date-picker
+                v-model="value1"
+                type="date"
+                placeholder="Pick a day"
+              />
+            </div>
+            <div class="block">
+              <span class="demonstration">结束日期:</span>
+              <el-date-picker
+                v-model="value2"
+                type="date"
+                placeholder="Pick a day"
+              /></div></el-space></el-space
+      ></el-aside>
       <el-container>
         <el-container
           style="max-width: 800px"
@@ -48,12 +76,12 @@
             id="main"
             ref="main"
           >
-            <el-scrollbar
-              ref="scroll"
-              :max-height="height - 80 + 'px'"
-              style="max-width: 800px; padding-right: 20px"
-            >
-              <div class="example-pagination-block">
+            <div class="example-pagination-block">
+              <el-scrollbar
+                ref="scroll"
+                :max-height="height - 80 - (width < 768 ? 28 : 36) + 'px'"
+                style="max-width: 800px; padding-right: 20px"
+              >
                 <view-card
                   style="max-width: 800px"
                   v-for="passage in page[current - 1]"
@@ -64,13 +92,16 @@
                   :time="passage.time"
                   :load="load"
                 ></view-card>
-                <el-pagination
-                  background
-                  :total="passages.length"
-                  v-model:currentPage="current"
-                />
-              </div> </el-scrollbar
-          ></el-main>
+              </el-scrollbar>
+              <el-pagination
+                layout="prev, pager, next"
+                :total="passages.length"
+                v-model:currentPage="current"
+                :small="width < 768"
+                :pager-count="5"
+              />
+            </div>
+          </el-main>
         </el-container>
         <el-aside v-if="width >= 1366" style="padding-top: 20px"
           >Aside</el-aside
@@ -83,7 +114,7 @@
 <script>
 import ViewCard from "./ViewCard.vue";
 import { Search } from "@element-plus/icons-vue";
-import { ref } from "vue";
+//import { ref } from "vue";
 var map = new Map();
 export default {
   components: {
@@ -103,32 +134,49 @@ export default {
       page: Array(),
       pageset: new Map(),
       load: false,
+      value1: "",
+      value2: "",
+      checkList: [],
     };
   },
   props: ["ready", "height"],
   methods: {
     loadfull() {
       if (this.current == 0) return;
-      if (this.scroll != null) this.scroll.scrollTo(0, 0);
-      if (this.pageset.has(this.input)&&this.pageset.get(this.input).has(this.current - 1) ) {
-        this.page[this.current - 1] = this.pageset.get(this.input).get(this.current - 1);
+      if (this.$refs.scroll != null && this.$refs.scroll.scrollTo != undefined)
+        this.$refs.scroll.scrollTo(0, 0);
+      if (
+        this.pageset.has(this.input) &&
+        this.pageset.get(this.input).has(this.current - 1)
+      ) {
+        this.page[this.current - 1] = this.pageset
+          .get(this.input)
+          .get(this.current - 1);
       } else {
         if (this.page[this.current - 1] == undefined) return;
-        if(this.page[this.current - 1].length == 0) return;
-        if(!this.pageset.has(this.input))
-        this.pageset.set(this.input, new Map());
+        if (this.page[this.current - 1].length == 0) return;
+        if (!this.pageset.has(this.input))
+          this.pageset.set(this.input, new Map());
         this.load = false;
         this.$axios
-          .post("http://localhost:8080", {
+          .post("http://124.223.53.17:8080", {
             id: this.page[this.current - 1],
           })
           .then((response) => {
-            if(response.data==null){
-              this.page[this.current - 1] = this.pageset.get(this.input).get(this.current - 1);
-            return;}
+            if (response.data == null) {
+              this.page[this.current - 1] = this.pageset
+                .get(this.input)
+                .get(this.current - 1);
+              return;
+            }
             this.page[this.current - 1] = response.data;
             this.load = true;
-            this.pageset.set(this.input, this.pageset.get(this.input).set(this.current - 1, this.page[this.current - 1]));
+            this.pageset.set(
+              this.input,
+              this.pageset
+                .get(this.input)
+                .set(this.current - 1, this.page[this.current - 1])
+            );
           });
       }
     },
@@ -172,9 +220,9 @@ export default {
   beforeMount() {
     if (this.input == "" && this.$route.query.key != undefined) {
       this.input = this.$route.query.key;
-      this.getpassage("http://localhost:8080/?key=" + this.input);
+      this.getpassage("http://124.223.53.17:8080/?key=" + this.input);
     } else {
-      this.getpassage("http://localhost:8080/");
+      this.getpassage("http://124.223.53.17:8080/");
     }
   },
   mounted() {
@@ -185,12 +233,6 @@ export default {
       this.mainwidth = window.innerWidth > 800 ? 800 : window.innerWidth;
     });
   },
-  setup() {
-    const scroll = ref(null);
-    return {
-      scroll: scroll.value,
-    };
-  },
   watch: {
     current() {
       this.loadfull();
@@ -200,7 +242,7 @@ export default {
       if (this.input != "") {
         this.$router.push({
           query: {
-            id: this.input,
+            key: this.input,
           },
         });
       } else {
@@ -222,7 +264,7 @@ export default {
         else this.current = 1;
       } else {
         this.$axios
-          .get("http://localhost:8080/?key=" + this.input)
+          .get("http://124.223.53.17:8080/?key=" + this.input)
           .then((res) => {
             if (res.data == null) {
               map.set(this.input, []);

@@ -70,7 +70,7 @@ export default {
 }
 .time {
   text-align: right;
-  font-size: 8px;
+  font-size: 14px;
   color: gray;
   float: right;
 }

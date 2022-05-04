@@ -21,6 +21,7 @@ export default {
       this.detail = res.data;
     });
     window.addEventListener("resize",()=>{this.width = window.innerWidth});
+
     this.$emit('loaded');
   },
   unmounted() {

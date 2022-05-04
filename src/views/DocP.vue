@@ -1,38 +1,33 @@
 <template>
   <div :style="{ 'min-height': height + 'px' }">
-    <transition name="scale">
-      <div>
-        <transition v-if="!ready" name="scale">
-          <Suspense>
+    <transition-group name="el-fade-in-linear" tag="w">
+          <Suspense v-if="!ready">
             <template #fallback>
+              <transition name="el-fade-in-linear">
               <loading-page></loading-page>
-            </template>
-            <template #default>
+              </transition>
+            </template>     
               <doc-main :ready="ready" :height="height"></doc-main>
-            </template>
           </Suspense>
-        </transition>
-        <transition v-if="ready" name="scale">
-          <Suspense>
+          <Suspense v-if="ready">
             <template #fallback>
+              <transition name="el-fade-in-linear">
               <loading-page></loading-page>
+              </transition>
             </template>
-            <template #default>
               <post-show
                 :loading="loading"
                 :ready="ready"
                 :height="height"
                 :path="path"
               ></post-show>
-            </template>
           </Suspense>
-        </transition>
-      </div>
-    </transition>
+    </transition-group>
   </div>
 </template>
 
 <script>
+import LoadingPage from "../components/LoadingPage.vue";
 import { defineAsyncComponent } from "vue";
 var _wr = function (type) {
   var orig = history[type];
@@ -46,7 +41,6 @@ var _wr = function (type) {
 };
 history.pushState = _wr("pushState");
 history.replaceState = _wr("replaceState");
-import LoadingPage from "../components/LoadingPage.vue";
 const PostShow = defineAsyncComponent(() =>
   import("../components/PostShow.vue")
 );
@@ -69,11 +63,13 @@ export default {
     getheight() {
       this.height = document.body.clientHeight - 140;
     },
-    routepath() {
+    async routepath() {
+        await this.$axios.get("http://124.223.53.17:8080/").then((res) => {
+        this.qlist=res.data;
+});
       this.path = this.$route.query.PassageId;
-      var qlist = ["1", "qq"];
       if (
-        qlist.find((element) => element == this.path) == undefined &&
+        this.qlist.find((element) => element == this.path) == undefined &&
         this.path != "" &&
         this.path != undefined
       ) {
@@ -83,21 +79,31 @@ export default {
       if (this.path != undefined && this.path != "") {
         this.ready = true;
       }
+      await this.$axios.get("http://124.223.53.17:8080/").then((res) => {
+        this.qlist = res.data;
+        if (
+          this.qlist.find((element) => element == this.path) == undefined &&
+          this.path != "" &&
+          this.path != undefined
+        ) {
+          this.$router.push("/passagenotdound");
+        }
+      });
     },
     load() {
       this.loading = false;
     },
   },
   watch: {
-    $route() {
+    async $route() {
       this.ready = false;
       this.loading = true;
-      this.routepath();
+      await this.routepath();
     },
   },
-  mounted() {
+  async mounted() {
     this.getheight();
-    this.routepath();
+    await this.routepath();
     window.addEventListener("resize", this.getheight);
   },
   unmounted() {
@@ -115,9 +121,10 @@ export default {
 .scale-enter-from,
 .scale-leave-to {
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.6);
 }
-.el-main{
+
+.el-main {
   padding-bottom: 0px;
 }
 </style>

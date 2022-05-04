@@ -62,7 +62,7 @@
         <el-main>
           <el-scrollbar :max-height="height">
             <router-view v-slot="{ Component }">
-              <transition name="scale">
+              <transition name="el-fade-in-linear">
                 <component :is="Component" />
               </transition> </router-view
           ></el-scrollbar>

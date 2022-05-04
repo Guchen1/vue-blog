@@ -5,48 +5,38 @@
         v-if="width >= 820"
         :style="{
           'min-height': height - 60 + 'px',
-          'margin-left': width >= 1200 ? '10%' : '0%',
-          width: width >= 1203 ? '20%' : '30%',
+          'margin-left': width >= 2200 ? '15%' : width >= 1220 ? '6%' : '5%',
+          width: width >= 1220 ? '20%' : '30%',
         }"
-        style="margin-left: 5%; padding-top: 20px"
-        ><el-space wrap
-          ><div style="margin-top: 70px">
-            分类:
-            <el-checkbox-group v-model="checkList">
-              <el-checkbox label="Option A" />
-              <el-checkbox label="Option B" />
-              <el-checkbox label="Option C" />
-            </el-checkbox-group>
-          </div>
-          <div></div>
-          <el-space direction="vertical" style="margin-top: 70px">
-            <div class="block">
-              <span class="demonstration">起始日期:</span>
-              <el-date-picker
-                v-model="value1"
-                type="date"
-                placeholder="Pick a day"
-              />
-            </div>
-            <div class="block">
-              <span class="demonstration">结束日期:</span>
-              <el-date-picker
-                v-model="value2"
-                type="date"
-                placeholder="Pick a day"
-              /></div></el-space></el-space
+        style="padding-top: 20px"
+        ><passage-filter :v1="value1" :v2="value2" :cl="checkList" @emit="(a,b,c)=>{value1=a;value2=b;checkList=c}"></passage-filter
       ></el-aside>
       <el-container>
         <el-container
           style="max-width: 800px"
-          :style="{ 'min-height': height - 60 + 'px' }"
+          :style="{
+            'min-height': height - 60 + 'px',
+            'max-width': width >= 1440 ? '70%' : '800px',
+          }"
         >
           <el-header
             style="padding-top: 20px"
             :style="{ width: widthp - 15 + 'px' }"
           >
             <el-row style="padding-right: 0px">
-              <el-col :span="18" :xs="14">
+              <el-col v-if="width < 820" :span="4"
+                ><el-popover
+                  v-if="width < 820"
+                  trigger="click"
+                  placement="bottom-start"
+                  width="235px"
+                >
+                  <template #reference>
+                    <el-button style="width: 100%">筛选</el-button>
+                  </template>
+                  <passage-filter :k="1" :v1="value1" :v2="value2" :cl="checkList" @emit="(a,b,c)=>{value1=a;value2=b;checkList=c}"></passage-filter> </el-popover
+              ></el-col>
+              <el-col :span="width < 820 ? 14 : 18" :xs="10">
                 <el-input v-model="input" placeholder="输入以搜索"
                   ><template #prefix>
                     <el-icon class="el-input__icon"
@@ -70,7 +60,7 @@
           <el-main
             :style="{
               'min-height': height - 60 + 'px',
-              'max-width': mainwidth + 'px',
+              'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
             }"
             style="padding-bottom: 0px !important"
             id="main"
@@ -80,10 +70,15 @@
               <el-scrollbar
                 ref="scroll"
                 :max-height="height - 80 - (width < 768 ? 28 : 36) + 'px'"
-                style="max-width: 800px; padding-right: 20px"
+                style="padding-right: 20px"
+                :style="{
+                  'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
+                }"
               >
                 <view-card
-                  style="max-width: 800px"
+                  :style="{
+                    'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
+                  }"
                   v-for="passage in page[current - 1]"
                   :key="passage.id"
                   :id="passage.id"
@@ -112,14 +107,22 @@
 </template>
 
 <script>
-import ViewCard from "./ViewCard.vue";
+import { defineAsyncComponent } from "vue";
+const  ViewCard =defineAsyncComponent(() =>
+  import("./ViewCard.vue")
+);
 import { Search } from "@element-plus/icons-vue";
 //import { ref } from "vue";
+const PassageFilter = defineAsyncComponent(() =>
+  import("./PassageFilter.vue")
+);
+
 var map = new Map();
 export default {
   components: {
     Search,
     ViewCard,
+    PassageFilter,
   },
   data() {
     return {
@@ -134,13 +137,18 @@ export default {
       page: Array(),
       pageset: new Map(),
       load: false,
-      value1: "",
-      value2: "",
-      checkList: [],
+      value1:undefined,
+      value2:undefined,
+      checkList:undefined
     };
   },
   props: ["ready", "height"],
   methods: {
+    detect(){
+      this.width = window.innerWidth;
+      this.widthp = document.getElementById("main").offsetWidth;
+      this.mainwidth = window.innerWidth > 800 ? 800 : window.innerWidth;
+    },
     loadfull() {
       if (this.current == 0) return;
       if (this.$refs.scroll != null && this.$refs.scroll.scrollTo != undefined)
@@ -227,11 +235,7 @@ export default {
   },
   mounted() {
     this.widthp = document.getElementById("main").offsetWidth;
-    window.addEventListener("resize", () => {
-      this.width = window.innerWidth;
-      this.widthp = document.getElementById("main").offsetWidth;
-      this.mainwidth = window.innerWidth > 800 ? 800 : window.innerWidth;
-    });
+    window.addEventListener("resize", this.detect);
   },
   watch: {
     current() {
@@ -289,11 +293,7 @@ export default {
     },
   },
   beforeUnmount() {
-    window.removeEventListener("resize", () => {
-      this.width = window.innerWidth;
-      this.widthp = document.getElementById("main").offsetWidth;
-      this.mainwidth = window.innerWidth > 800 ? 800 : window.innerWidth;
-    });
+    window.removeEventListener("resize", this.detect);
   },
 };
 </script>

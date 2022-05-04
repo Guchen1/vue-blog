@@ -1,7 +1,7 @@
 <template>
-  
-  <div :style="{ 'min-height': height+'px' }">2234</div>
-
+  <div :style="{width:width>=1024?'70%':'90%','min-height': height + 'px' }" class="center">
+   <el-page-header content="detail" @back="$router.push('/doc');"  />
+  </div>
 </template>
 
 <script>
@@ -10,10 +10,18 @@ export default {
   methods: {
     
   },
+  data() {
+    return {
+     width: window.innerWidth,
+    };
+  },
   mounted() {
-    
-      this.$emit('loaded');
+    window.addEventListener("resize",()=>{this.width = window.innerWidth});
+    this.$emit('loaded');
 
+  },
+  unmounted() {
+    window.removeEventListener("resize",()=>{this.width = window.innerWidth});
   },
   updated() {
 
@@ -24,4 +32,7 @@ export default {
 </script>
 
 <style>
+.center{
+  margin:0 auto;
+}
 </style>

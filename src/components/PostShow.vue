@@ -12,13 +12,18 @@ export default {
   },
   data() {
     return {
+      list: [],
      width: window.innerWidth,
     };
   },
-  mounted() {
+ async mounted() {
+    await this.$axios.get("http://124.223.53.17:8080?details="+this.path).then(res => {
+      this.detail = res.data;
+      console.log(this.detail);
+    });
     window.addEventListener("resize",()=>{this.width = window.innerWidth});
+    console.log(1);
     this.$emit('loaded');
-
   },
   unmounted() {
     window.removeEventListener("resize",()=>{this.width = window.innerWidth});

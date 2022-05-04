@@ -1,28 +1,28 @@
 <template>
   <div :style="{ 'min-height': height + 'px' }">
-    <keep-alive :key="1">
-      <transition v-if="!ready" name="el-fade-in-linear">
-        <Suspense>
-          <template #fallback>
-            <loading-page></loading-page>
-          </template>
-          <doc-main :ready="ready" :height="height"></doc-main>
-        </Suspense>
-      </transition>
-    </keep-alive>
-    <transition v-if="ready" name="el-fade-in-linear">
-      <Suspense :key="2">
-        <template #fallback>
-          <loading-page></loading-page>
-        </template>
-        <post-show
-          :loading="loading"
-          :ready="ready"
-          :height="height"
-          :path="path"
-        ></post-show>
-      </Suspense>
-    </transition>
+    <transition-group name="el-fade-in-linear" tag="w">
+          <Suspense v-if="!ready">
+            <template #fallback>
+              <transition name="el-fade-in-linear">
+              <loading-page></loading-page>
+              </transition>
+            </template>     
+              <doc-main :ready="ready" :height="height"></doc-main>
+          </Suspense>
+          <Suspense v-if="ready">
+            <template #fallback>
+              <transition name="el-fade-in-linear">
+              <loading-page></loading-page>
+              </transition>
+            </template>
+              <post-show
+                :loading="loading"
+                :ready="ready"
+                :height="height"
+                :path="path"
+              ></post-show>
+          </Suspense>
+    </transition-group>
   </div>
 </template>
 
@@ -41,7 +41,9 @@ var _wr = function (type) {
 };
 history.pushState = _wr("pushState");
 history.replaceState = _wr("replaceState");
-const PostShow = defineAsyncComponent(() => import("../components/PostShow.vue"));
+const PostShow = defineAsyncComponent(() =>
+  import("../components/PostShow.vue")
+);
 const DocMain = defineAsyncComponent(() => import("../components/DocMain.vue"));
 export default {
   components: {
@@ -62,7 +64,18 @@ export default {
       this.height = document.body.clientHeight - 140;
     },
     async routepath() {
+        await this.$axios.get("http://124.223.53.17:8080/").then((res) => {
+        this.qlist=res.data;
+});
       this.path = this.$route.query.PassageId;
+      if (
+        this.qlist.find((element) => element == this.path) == undefined &&
+        this.path != "" &&
+        this.path != undefined
+      ) {
+        this.$router.push("/passagenotdound");
+        return;
+      }
       if (this.path != undefined && this.path != "") {
         this.ready = true;
       }
@@ -88,10 +101,9 @@ export default {
       await this.routepath();
     },
   },
-  async created() {
-    await this.routepath();
-    console.log(this.ready);
+  async mounted() {
     this.getheight();
+    await this.routepath();
     window.addEventListener("resize", this.getheight);
   },
   unmounted() {

@@ -246,8 +246,11 @@ export default {
     }
   },
   mounted() {
-    if (document.getElementById("main") != null)
-      this.widthp = document.getElementById("main").offsetWidth;
+    setTimeout(() => {
+      if (document.getElementById("main") != null)
+        this.widthp = document.getElementById("main").offsetWidth - 5;
+    }, 300);
+
     window.addEventListener("resize", this.detect);
   },
   watch: {
@@ -255,7 +258,7 @@ export default {
       this.width = window.innerWidth;
       setTimeout(() => {
         if (document.getElementById("main") != null)
-          this.widthp = document.getElementById("main").offsetWidth;
+          this.widthp = document.getElementById("main").offsetWidth - 5;
       }, 100);
       this.mainwidth = window.innerWidth > 800 ? 800 : window.innerWidth;
     },

@@ -14,7 +14,7 @@
             class="header"
             :class="{ active: path == '/' }"
             ref="to"
-            ><router-link class="el-link gu" style="font-size: 16px;width:100%" to="/" 
+            ><router-link class="el-link gu" style="font-size: 16px; width: 100%" to="/"
               >主页</router-link
             ></el-col
           ><el-col
@@ -26,8 +26,8 @@
             :class="{ active: path == '/doc' }"
             ><router-link
               class="el-link gu --el-font-size-medium"
-              style="font-size: 16px;width:100%"
-              :to="{ name: 'doc', query: { } }"
+              style="font-size: 16px; width: 100%"
+              :to="{ name: 'doc', query: {} }"
               >文章</router-link
             ></el-col
           ><el-col
@@ -39,7 +39,7 @@
             :class="{ active: path == '/setting' }"
             ><router-link
               class="el-link gu --el-font-size-medium"
-              style="font-size: 16px;width:100%"
+              style="font-size: 16px; width: 100%"
               to="/setting"
               >设置</router-link
             ></el-col
@@ -52,7 +52,7 @@
             :class="{ active: path == '/login' }"
             ><router-link
               class="el-link gu --el-font-size-medium"
-              style="font-size: 16px;width:100%"
+              style="font-size: 16px; width: 100%"
               to="/login"
               >登录</router-link
             ></el-col
@@ -60,11 +60,23 @@
       ></el-header>
       <el-container>
         <el-main>
-          <el-scrollbar :max-height="height">
-            <router-view v-slot="{ Component }">
-              <transition name="el-fade-in-linear">
-                <component :is="Component" />
-              </transition> </router-view
+          <el-scrollbar ref="sc" :max-height="height" width="100%">
+            <RouterView v-slot="{ Component }">
+              <template v-if="Component">
+                <Transition name="el-fade-in-linear">
+                  <KeepAlive exclude="PostShow">
+                    <Suspense>
+                      <!-- 主要内容 -->
+                      <component :is="Component"></component>
+
+                      <!-- 加载中状态 -->
+                      <template #fallback>
+                        <LoadingPage></LoadingPage>
+                      </template>
+                    </Suspense>
+                  </KeepAlive>
+                </Transition>
+              </template> </RouterView
           ></el-scrollbar>
         </el-main>
         <el-footer
@@ -78,6 +90,7 @@
 </template>
 
 <script>
+import LoadingPage from "./components/LoadingPage.vue";
 //import { Edit } from '@element-plus/icons-vue'
 var _wr = function (type) {
   var orig = history[type];
@@ -92,28 +105,29 @@ var _wr = function (type) {
 history.pushState = _wr("pushState");
 history.replaceState = _wr("replaceState");
 export default {
-  components: {},
+  components: { LoadingPage },
   name: "App",
   data() {
     return {
       path: window.location.href,
-      height: document.body.clientHeight - 140 +'px',
+      height: document.body.clientHeight - 140 + "px",
     };
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 140+'px' ;
+      this.height = document.body.clientHeight - 140 + "px";
+      setTimeout(() => {
+        clearInterval(a);
+      }, 400);
+      var a = setInterval(() => {
+        this.$refs.sc.update();
+      }, 100);
     },
     hashc() {
       this.path = window.location.href;
-      this.path = this.path
-        .substring(7)
-        .substring(this.path.substring(7).search("/"));
+      this.path = this.path.substring(7).substring(this.path.substring(7).search("/"));
       if (this.path.substring(1).search("/") != -1) {
-        this.path = this.path.substring(
-          0,
-          this.path.substring(1).search("/") + 1
-        );
+        this.path = this.path.substring(0, this.path.substring(1).search("/") + 1);
       }
       if (this.path.search("\\?") != -1) {
         this.path = this.path.substring(0, this.path.search("\\?"));
@@ -155,14 +169,14 @@ export default {
 }
 .header {
   border-bottom: 2px solid var(--el-border-color);
-  height:60px;
+  height: 60px;
   text-align: center;
 }
 .text {
 }
 .center {
   line-height: 60px;
-  height:60px;
+  height: 60px;
   font-size: 16px !important;
 }
 .gu {
@@ -172,7 +186,7 @@ export default {
 .active {
   border-bottom: 3px solid var(--el-color-primary);
 }
-.el-main{
+.el-main {
   padding-bottom: 0px;
 }
 </style>

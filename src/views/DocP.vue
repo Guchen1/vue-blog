@@ -1,33 +1,22 @@
 <template>
   <div :style="{ 'min-height': height + 'px' }">
-    <transition-group name="el-fade-in-linear" tag="w">
-          <Suspense v-if="!ready">
-            <template #fallback>
-              <transition name="el-fade-in-linear">
-              <loading-page></loading-page>
-              </transition>
-            </template>     
-              <doc-main :ready="ready" :height="height"></doc-main>
-          </Suspense>
-          <Suspense v-if="ready">
-            <template #fallback>
-              <transition name="el-fade-in-linear">
-              <loading-page></loading-page>
-              </transition>
-            </template>
-              <post-show
-                :loading="loading"
-                :ready="ready"
-                :height="height"
-                :path="path"
-              ></post-show>
-          </Suspense>
+    <transition-group name="el-fade-in-linear">
+      <keep-alive :key="1" exclude="PostShow">
+        <doc-main v-if="!ready" :ready="ready" :key="1" :height="height"></doc-main>
+        <post-show
+          v-else
+          :key="2"
+          :loading="loading"
+          :ready="ready"
+          :height="height"
+          :path="path"
+        ></post-show>
+      </keep-alive>
     </transition-group>
   </div>
 </template>
 
 <script>
-import LoadingPage from "../components/LoadingPage.vue";
 import { defineAsyncComponent } from "vue";
 var _wr = function (type) {
   var orig = history[type];
@@ -41,15 +30,12 @@ var _wr = function (type) {
 };
 history.pushState = _wr("pushState");
 history.replaceState = _wr("replaceState");
-const PostShow = defineAsyncComponent(() =>
-  import("../components/PostShow.vue")
-);
+const PostShow = defineAsyncComponent(() => import("../components/PostShow.vue"));
 const DocMain = defineAsyncComponent(() => import("../components/DocMain.vue"));
 export default {
   components: {
     PostShow,
     DocMain,
-    LoadingPage,
   },
   data() {
     return {
@@ -57,6 +43,7 @@ export default {
       ready: false,
       path: this.$route.query.PassageId,
       loading: true,
+      qlist: undefined,
     };
   },
   methods: {
@@ -64,31 +51,30 @@ export default {
       this.height = document.body.clientHeight - 140;
     },
     async routepath() {
-        await this.$axios.get("http://124.223.53.17:8080/").then((res) => {
-        this.qlist=res.data;
-});
       this.path = this.$route.query.PassageId;
-      if (
+      if (this.$route.path == "/doc") {
+        if (this.path != undefined && this.path != "") {
+          this.ready = true;
+        } else this.ready = false;
+      }
+      if (this.qlist == undefined) {
+        await this.$axios.get("http://124.223.53.17:8080/").then((res) => {
+          this.qlist = res.data;
+          if (
+            this.qlist.find((element) => element == this.path) == undefined &&
+            this.path != "" &&
+            this.path != undefined
+          ) {
+            this.$router.push("/passagenotdound");
+          }
+        });
+      } else if (
         this.qlist.find((element) => element == this.path) == undefined &&
         this.path != "" &&
         this.path != undefined
       ) {
         this.$router.push("/passagenotdound");
-        return;
       }
-      if (this.path != undefined && this.path != "") {
-        this.ready = true;
-      }
-      await this.$axios.get("http://124.223.53.17:8080/").then((res) => {
-        this.qlist = res.data;
-        if (
-          this.qlist.find((element) => element == this.path) == undefined &&
-          this.path != "" &&
-          this.path != undefined
-        ) {
-          this.$router.push("/passagenotdound");
-        }
-      });
     },
     load() {
       this.loading = false;
@@ -96,9 +82,9 @@ export default {
   },
   watch: {
     async $route() {
-      this.ready = false;
       this.loading = true;
       await this.routepath();
+      console.log(this.ready);
     },
   },
   async mounted() {

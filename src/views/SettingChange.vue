@@ -29,9 +29,7 @@ export default defineComponent({
 </script>
 
 <style>
-.rq{
 
-}
 .el-main{
   padding-bottom: 0px;
 }

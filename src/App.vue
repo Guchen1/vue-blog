@@ -63,7 +63,7 @@
           <el-scrollbar ref="sc" :max-height="height" width="100%">
             <RouterView v-slot="{ Component }">
               <template v-if="Component">
-                <Transition name="el-fade-in-linear">
+                <Transition name="el-fade-in-linear" mode="out-in">
                   <KeepAlive exclude="PostShow">
                     <Suspense>
                       <!-- 主要内容 -->

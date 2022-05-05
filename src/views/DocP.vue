@@ -1,6 +1,6 @@
 <template>
   <div :style="{ 'min-height': height + 'px' }">
-    <transition-group name="el-fade-in-linear">
+    <transition name="el-fade-in-linear" mode="out-in">
       <keep-alive :key="1" exclude="PostShow">
         <doc-main v-if="!ready" :ready="ready" :key="1" :height="height"></doc-main>
         <post-show
@@ -12,7 +12,7 @@
           :path="path"
         ></post-show>
       </keep-alive>
-    </transition-group>
+    </transition>
   </div>
 </template>
 
@@ -84,7 +84,6 @@ export default {
     async $route() {
       this.loading = true;
       await this.routepath();
-      console.log(this.ready);
     },
   },
   async mounted() {

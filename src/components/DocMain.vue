@@ -200,7 +200,7 @@ export default {
           });
       }
     },
-    getpassage(url) {
+    async getpassage(url) {
       if (map.has(this.input)) {
         this.page = [];
         this.passages = map.get(this.input);
@@ -214,7 +214,7 @@ export default {
         if (this.current == 1) this.loadfull();
         else this.current = 1;
       } else {
-        this.$axios.get(url).then((res) => {
+        await this.$axios.get(url).then((res) => {
           this.passages = [];
           this.page = [];
           if (res.data == null) {
@@ -237,16 +237,17 @@ export default {
       }
     },
   },
-  beforeMount() {
+  async beforeMount() {
     if (this.input == "" && this.$route.query.key != undefined) {
       this.input = this.$route.query.key;
-      this.getpassage("http://124.223.53.17:8080/?key=" + this.input);
+      await this.getpassage("http://124.223.53.17:8080/?key=" + this.input);
     } else {
-      this.getpassage("http://124.223.53.17:8080/");
+      await this.getpassage("http://124.223.53.17:8080/");
     }
   },
   mounted() {
-    this.widthp = document.getElementById("main").offsetWidth;
+    if (document.getElementById("main") != null)
+      this.widthp = document.getElementById("main").offsetWidth;
     window.addEventListener("resize", this.detect);
   },
   watch: {

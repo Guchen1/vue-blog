@@ -5,6 +5,7 @@
     class="center"
   >
     <el-page-header :content="detail.title" @back="$router.back()" />
+    jsjsjsj
   </div>
   <LoadingPage v-else />
 </template>

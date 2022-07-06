@@ -94,6 +94,7 @@
                 }"
               >
                 <view-card
+                  class="ssss"
                   :style="{
                     'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
                   }"
@@ -103,6 +104,8 @@
                   :title="passage.title"
                   :summary="passage.summary"
                   :time="passage.time"
+                  :width="width"
+                  :mwidth="mwidth"
                   :load="load"
                 ></view-card>
               </el-scrollbar>
@@ -154,6 +157,7 @@ export default {
       value2: undefined,
       checkList: undefined,
       widthtemp: 1,
+      mwidth: 0,
     };
   },
   props: ["ready", "height"],
@@ -247,8 +251,10 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      if (document.getElementById("main") != null)
+      if (document.getElementById("main") != null) {
         this.widthp = document.getElementById("main").offsetWidth - 5;
+        this.mwidth = document.getElementsByClassName("ssss")[0].offsetWidth;
+      }
     }, 300);
 
     window.addEventListener("resize", this.detect);
@@ -259,10 +265,17 @@ export default {
       setTimeout(() => {
         if (document.getElementById("main") != null)
           this.widthp = document.getElementById("main").offsetWidth - 5;
+        if (document.getElementsByClassName("ssss")[0] != null)
+          this.mwidth = document.getElementsByClassName("ssss")[0].offsetWidth;
       }, 100);
       this.mainwidth = window.innerWidth > 800 ? 800 : window.innerWidth;
     },
     $route() {
+      setTimeout(() => {
+        if (document.getElementById("main") != null) {
+          this.widthp = document.getElementById("main").offsetWidth - 5;
+        }
+      }, 200);
       this.$refs.scroll.scrollTo(0, 0);
       this.$refs.scroll.update();
     },

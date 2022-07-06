@@ -21,12 +21,27 @@
             <div class="content">
               <h3 class="title">{{ title }}</h3>
               <p class="description">{{ summary }}</p>
-              <div>
+              <el-space>
                 <el-icon :size="15">
                   <calendar />
                 </el-icon>
                 <div class="time">{{ time }}</div>
-              </div>
+                <div
+                  :style="{ width: mwidth - 323 + 'px' }"
+                  v-if="width >= 426 ? 1 : 0"
+                ></div>
+                <el-icon v-if="width >= 426 ? 1 : 0" :size="15">
+                  <View />
+                </el-icon>
+                <el-rate
+                  v-if="width >= 426 ? 1 : 0"
+                  style=""
+                  v-model="va1"
+                  disabled
+                  text-color="#ff9900"
+                  score-template="{value} points"
+                />
+              </el-space>
             </div>
           </template>
         </el-skeleton>
@@ -37,14 +52,17 @@
 
 <script>
 import { Calendar } from "@element-plus/icons-vue";
+import { View } from "@element-plus/icons-vue";
 export default {
   components: {
     Calendar,
+    View,
   },
   data() {
     return {
       img: new Image(),
       loaded: false,
+      va1: 5,
     };
   },
   methods: {},
@@ -54,7 +72,7 @@ export default {
       this.loaded = true;
     };
   },
-  props: ["id", "title", "summary", "time", "load"],
+  props: ["id", "title", "summary", "time", "load", "width", "mwidth"],
 };
 </script>
 
@@ -69,9 +87,12 @@ export default {
   height: 150px;
 }
 .time {
-  text-align: right;
-  font-size: 14px;
+  text-align: left;
+  font-size: 15px;
+  height: 15px;
+  text-align: center;
+  line-height: 15px;
   color: gray;
-  float: right;
+  display: inline-block;
 }
 </style>

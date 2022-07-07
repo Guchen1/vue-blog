@@ -59,15 +59,22 @@
           ><el-col :md="2" :xs="1" :sm="2" class="header"></el-col></el-row
       ></el-header>
       <el-container>
-        <el-main>
-          <el-scrollbar ref="sc" :max-height="height" width="100%">
+        <el-main
+          :style="{ padding: IsMain ? '0px' : '20px' }"
+          style="padding-bottom: 0px"
+        >
+          <el-scrollbar
+            ref="sc"
+            :max-height="IsMain ? height + 80 + 'px' : height + 'px'"
+            width="100%"
+          >
             <RouterView v-slot="{ Component }">
               <template v-if="Component">
                 <Transition name="el-fade-in-linear" mode="out-in">
                   <KeepAlive exclude="PostShow">
                     <Suspense>
                       <!-- 主要内容 -->
-                      <component :is="Component"></component>
+                      <component :is="Component" :key="$route.name"></component>
 
                       <!-- 加载中状态 -->
                       <template #fallback>
@@ -79,7 +86,7 @@
               </template> </RouterView
           ></el-scrollbar>
         </el-main>
-        <el-footer
+        <el-footer v-if="!IsMain"
           ><div class="center" style="text-align: center">
             Copyright © 2022
           </div></el-footer
@@ -110,12 +117,13 @@ export default {
   data() {
     return {
       path: window.location.href,
-      height: document.body.clientHeight - 140 + "px",
+      height: document.body.clientHeight - 140,
+      IsMain: 0,
     };
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 140 + "px";
+      this.height = document.body.clientHeight - 140;
       setTimeout(() => {
         clearInterval(a);
       }, 400);
@@ -136,13 +144,24 @@ export default {
         this.path = "/";
       }
     },
+    checkIsMain() {
+      setTimeout(() => {
+        if (this.$route.path == "/") {
+          this.IsMain = 1;
+        } else this.IsMain = 0;
+      }, 250);
+    },
   },
   watch: {
     $route() {
       this.hashc();
+      this.checkIsMain();
     },
   },
   mounted() {
+    if (this.$route.path == "/") {
+      this.IsMain = 1;
+    } else this.IsMain = 0;
     this.hashc();
     this.getheight();
     window.addEventListener("resize", this.getheight);

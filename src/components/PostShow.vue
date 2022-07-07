@@ -29,23 +29,17 @@ export default {
   },
   async mounted() {
     this.loaded = false;
-    await this.$axios
-      .get("http://124.223.53.17:8080?details=" + this.path)
-      .then((res) => {
-        this.detail = res.data;
-        this.loaded = true;
-      });
+    await this.$axios.get("http://localhost:8080?details=" + this.path).then((res) => {
+      this.detail = res.data;
+      this.loaded = true;
+    });
     this.detail = { title: "第一篇", content: "这是一篇文章" };
     window.addEventListener("resize", () => {
       this.width = window.innerWidth;
     });
     this.$emit("loaded");
   },
-  unmounted() {
-    window.removeEventListener("resize", () => {
-      this.width = window.innerWidth;
-    });
-  },
+  unmounted() {},
   updated() {
     this.$emit("loaded");
   },

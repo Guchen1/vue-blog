@@ -17,12 +17,13 @@ export default {
     return {
       height: 0,
       width: document.body.clientWidth - 40,
-      time:setTimeout(() => {
-      this.$router.push('/');
-    }, 3000)
+      time: setTimeout(() => {
+        this.$router.push("/");
+      }, 3000),
     };
   },
   methods: {
+    //s() {},
     getheight() {
       this.height = document.body.clientHeight - 140;
     },
@@ -34,7 +35,6 @@ export default {
     this.getheight();
     window.addEventListener("resize", this.getheight);
     window.addEventListener("resize", this.getwidth);
-    
   },
 
   unmounted() {
@@ -69,8 +69,8 @@ export default {
       font-size: 30px;
     }
   }
-} ;
-.el-main{
+}
+.el-main {
   padding-bottom: 0px;
 }
 </style>

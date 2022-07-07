@@ -1,12 +1,12 @@
 <template>
-<div :style="{'min-height':height}">4</div>
+  <div :style="{ 'min-height': height }">4</div>
 </template>
 
 <script>
-import { defineComponent } from 'vue' 
+import { defineComponent } from "vue";
 
-export default defineComponent({ 
-        data() {
+export default defineComponent({
+  data() {
     return {
       height: "",
     };
@@ -23,12 +23,11 @@ export default defineComponent({
   unmounted() {
     window.removeEventListener("resize", this.getheight);
   },
-})
-
+});
 </script>
 
 <style>
-.el-main{
+.el-main {
   padding-bottom: 0px;
 }
 </style>

@@ -1,30 +1,48 @@
 <template>
-  <el-scrollbar
-    ref="scs"
-    :max-height="height + 'px'"
-    width="100%"
-    @scroll="count"
-    id="scs"
-  >
+  <div>
     <div
-      class="r"
-      :style="{ 'min-height': height + 'px' }"
-      style="background-color: green"
+      style="position: fixed; z-index: 10000; right: 30px"
+      :style="{ top: height / 2 + 'px' }"
     >
-      1
+      <el-space size="small" direction="vertical"
+        ><div
+          v-for="i in (0, maxpage + 1)"
+          :key="i"
+          :class="page == i - 1 ? 'circle-full' : 'circle'"
+        ></div>
+      </el-space>
     </div>
-    <div class="r" :style="{ 'min-height': height + 'px' }" style="background-color: red">
-      1
-    </div>
-    <div
-      class="r"
-      :style="{ 'min-height': height + 0.5 + 'px' }"
-      style="background-color: blue"
+    <el-scrollbar
+      ref="scs"
+      :max-height="height + 'px'"
+      width="100%"
+      @scroll="count"
+      id="scs"
     >
-      1
-    </div>
-    <div style="height: 60px">1</div>
-  </el-scrollbar>
+      <div
+        class="r"
+        :style="{ 'min-height': height + 'px' }"
+        style="background-color: green"
+      >
+        1
+      </div>
+      <div
+        class="r"
+        :style="{ 'min-height': height + 'px' }"
+        style="background-color: red"
+      >
+        1
+      </div>
+      <div
+        class="r"
+        :style="{ 'min-height': height + 0.5 + 'px' }"
+        style="background-color: blue"
+      >
+        1
+      </div>
+      <div style="height: 60px">1</div>
+    </el-scrollbar>
+  </div>
 </template>
 
 <script>
@@ -155,5 +173,27 @@ export default {
 <style>
 .el-main {
   padding-bottom: 0px;
+}
+.circle {
+  width: 10px;
+
+  height: 10px;
+
+  background-color: transparent; /* Can be set to transparent */
+
+  border: 1px grey solid;
+
+  border-radius: 100px;
+}
+.circle-full {
+  width: 10px;
+
+  height: 10px;
+
+  background-color: grey; /* Can be set to transparent */
+
+  border: 1px grey solid;
+
+  border-radius: 100px;
 }
 </style>

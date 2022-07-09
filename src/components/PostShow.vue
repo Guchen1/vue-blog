@@ -29,7 +29,7 @@ export default {
   },
   async mounted() {
     this.loaded = false;
-    await this.$axios.get("http://localhost:8080?details=" + this.path).then((res) => {
+    await this.$axios.get(this.$server + "?details=" + this.path).then((res) => {
       this.detail = res.data;
       this.loaded = true;
     });

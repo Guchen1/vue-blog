@@ -74,7 +74,11 @@
                   <KeepAlive exclude="PostShow">
                     <Suspense>
                       <!-- 主要内容 -->
-                      <component :is="Component" :key="$route.name"></component>
+                      <component
+                        :height="height + 80"
+                        :is="Component"
+                        :key="$route.name"
+                      ></component>
 
                       <!-- 加载中状态 -->
                       <template #fallback>

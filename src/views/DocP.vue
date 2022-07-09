@@ -58,7 +58,7 @@ export default {
         } else this.ready = false;
       }
       if (this.qlist == undefined) {
-        await this.$axios.get("http://localhost:8080/").then((res) => {
+        await this.$axios.get(this.$server).then((res) => {
           this.qlist = res.data;
           if (
             this.qlist.find((element) => element == this.path) == undefined &&

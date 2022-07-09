@@ -7,4 +7,5 @@ import router from './router'
 const app = createApp(App)
 app.use(router).use(ElementPlus)
 app.mount('#app')
+app.config.globalProperties.$server = "http://124.223.53.17:8080/"
 app.config.globalProperties.$axios = axios;

@@ -8,8 +8,10 @@
         ><div
           v-for="i in (0, maxpage + 1)"
           :key="i"
+          @click="lock ? null : jump(i - 1)"
           :class="page == i - 1 ? 'circle-full' : 'circle'"
         ></div>
+        <div :class="page == maxpage + 1 ? 'circle-small-full' : 'circle-small'"></div>
       </el-space>
     </div>
     <el-scrollbar
@@ -35,12 +37,14 @@
       </div>
       <div
         class="r"
-        :style="{ 'min-height': height + 0.5 + 'px' }"
+        :style="{ 'min-height': height + 5 + 'px' }"
         style="background-color: blue"
       >
         1
       </div>
-      <div style="height: 60px">1</div>
+      <div style="height: 60px; text-align: center; line-height: 60px">
+        Copyright © 2022
+      </div>
     </el-scrollbar>
   </div>
 </template>
@@ -70,23 +74,36 @@ var scrollFunction = function (e) {
 export default {
   data() {
     return {
-      height: "",
       page: 0,
       oldcount: 0,
       lock: 0,
       maxpage: 2,
       show: 0,
+      oldpage: 0,
+      disabledoublelock: 0,
+      flock: 0,
+      timeout: 0,
+      allow: 0,
+      oldpos: 0,
     };
   },
+  props: {
+    height: {
+      type: Number,
+      default: 0,
+    },
+  },
   methods: {
-    hello() {},
-    getheight() {
-      this.height = document.body.clientHeight - 60;
+    jump(page) {
+      this.page = page;
+      this.disabledoublelock = 1;
     },
     count() {
       if (this.lock != 1) {
+        this.flock = 1;
         if (this.$refs.scs.wrap$.scrollTop - this.maxpage * this.height > 10) {
           this.page = this.maxpage + 1;
+          this.flock = 0;
           return;
         }
         if (this.$refs.scs.wrap$.scrollTop >= this.oldcount) {
@@ -100,11 +117,12 @@ export default {
             (this.$refs.scs.wrap$.scrollTop + this.height / 3) / this.height
           );
         }
+        this.flock = 0;
       }
 
       this.oldcount = this.$refs.scs.wrap$.scrollTop;
     },
-    ScrollTop(number = 0, time, fix = 0) {
+    ScrollTop(number = 0, time, fix = 0, dis = 0) {
       if (!time) {
         this.$refs.scs.wrap$.scrollTop = number;
         return number;
@@ -119,10 +137,12 @@ export default {
           this.ScrollTop((nowTop += everTop));
         } else {
           clearInterval(scrollTimer); // 清除计时器
-          if (fix == 0) {
+          if (fix == 0 && dis == 0) {
+            this.lock = 0;
             this.timeout = setTimeout(() => {
+              this.lock = 1;
               this.ScrollTop(number, 100, 1);
-            }, 100);
+            }, 300);
           } else {
             this.lock = 0;
           }
@@ -130,19 +150,51 @@ export default {
       }, spacingTime);
     },
   },
-  mounted() {
-    this.getheight();
-    window.addEventListener("resize", this.getheight);
-  },
-  unmounted() {
-    window.removeEventListener("resize", this.getheight);
-  },
+
   watch: {
     page() {
+      if (this.page < this.maxpage) this.allow = 0;
       //this.$refs.scs.scrollTo(0, 729 * this.page);
+      if (this.page != this.maxpage + 1) clearTimeout(this.timeout);
+      else if (!this.allow) {
+        this.page = this.maxpage;
+        this.allow = 1;
+      } else this.allow = 0;
       this.lock = 1;
-      if (this.page == this.maxpage) this.ScrollTop(this.height * this.page + 0.5, 200);
-      else this.ScrollTop(this.height * this.page, 200);
+      if (this.oldpage == this.maxpage + 1 && !this.disabledoublelock) {
+        this.lock = 0;
+        this.timeout = setTimeout(() => {
+          this.lock = 1;
+          this.ScrollTop(
+            this.height * this.page + 5,
+            Math.abs(this.oldpage - this.page) >= 1
+              ? Math.abs(this.oldpage - this.page) * 200
+              : 200,
+            0,
+            this.disabledoublelock
+          );
+        }, 1000);
+        this.oldpage = this.page;
+        return;
+      }
+      if (this.page == this.maxpage)
+        this.ScrollTop(
+          this.height * this.page + 5,
+          Math.abs(this.oldpage - this.page) >= 1
+            ? Math.abs(this.oldpage - this.page) * 200
+            : 200,
+          this.disabledoublelock
+        );
+      else
+        this.ScrollTop(
+          this.height * this.page,
+          Math.abs(this.oldpage - this.page) >= 1
+            ? Math.abs(this.oldpage - this.page) * 200
+            : 200,
+          this.disabledoublelock
+        );
+      this.disabledoublelock = 0;
+      this.oldpage = this.page;
       //console.log(this.page);
     },
     lock() {
@@ -167,6 +219,19 @@ export default {
       }
     },
   },
+  deactivated() {
+    this.oldpos = this.$refs.scs.wrap$.scrollTop;
+    console.log(this.oldpos);
+    console.log(1);
+  },
+  activated() {
+    console.log(this.oldpos);
+    setTimeout(() => {
+      this.$refs.scs.wrap$.scrollTop = this.oldpos;
+    }, 250);
+
+    console.log(2);
+  },
 };
 </script>
 
@@ -175,6 +240,28 @@ export default {
   padding-bottom: 0px;
 }
 .circle {
+  width: 15px;
+
+  height: 15px;
+  cursor: pointer;
+  background-color: transparent; /* Can be set to transparent */
+
+  border: 1px grey solid;
+
+  border-radius: 100px;
+}
+.circle-full {
+  width: 15px;
+  cursor: pointer;
+  height: 15px;
+
+  background-color: grey; /* Can be set to transparent */
+
+  border: 1px grey solid;
+
+  border-radius: 100px;
+}
+.circle-small {
   width: 10px;
 
   height: 10px;
@@ -185,7 +272,7 @@ export default {
 
   border-radius: 100px;
 }
-.circle-full {
+.circle-small-full {
   width: 10px;
 
   height: 10px;

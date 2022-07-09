@@ -228,7 +228,7 @@ export default {
     console.log(this.oldpos);
     setTimeout(() => {
       this.$refs.scs.wrap$.scrollTop = this.oldpos;
-    }, 250);
+    }, 300);
 
     console.log(2);
   },

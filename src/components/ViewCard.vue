@@ -67,7 +67,7 @@ export default {
   },
   methods: {},
   created() {
-    this.img.src = require("../assets/p1.jpg");
+    this.img.src = "./img/p1.jpg";
     this.img.onload = () => {
       this.loaded = true;
     };

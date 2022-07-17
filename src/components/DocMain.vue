@@ -259,7 +259,7 @@ export default {
       }
     }, 300);
 
-    window.addEventListener("resize", this.detect);
+    window.addEventListener("resize", this.detect, { passive: true });
   },
   watch: {
     widthtemp() {

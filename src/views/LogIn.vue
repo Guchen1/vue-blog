@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ 'min-height': height }">4</div>
+  <div :style="{ 'min-height': height - 80 + 'px' }">4</div>
 </template>
 
 <script>
@@ -7,21 +7,13 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   data() {
-    return {
-      height: "",
-    };
+    return {};
   },
-  methods: {
-    getheight() {
-      this.height = document.body.clientHeight - 140 + "px";
+  props: {
+    height: {
+      type: Number,
+      default: 0,
     },
-  },
-  mounted() {
-    this.getheight();
-    window.addEventListener("resize", this.getheight);
-  },
-  unmounted() {
-    window.removeEventListener("resize", this.getheight);
   },
 });
 </script>

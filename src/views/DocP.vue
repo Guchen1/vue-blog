@@ -1,14 +1,14 @@
 <template>
-  <div :style="{ 'min-height': height + 'px' }">
+  <div :style="{ 'min-height': height - 80 + 'px' }">
     <transition name="el-fade-in-linear" mode="out-in">
       <keep-alive :key="1" exclude="PostShow">
-        <doc-main v-if="!ready" :ready="ready" :key="1" :height="height"></doc-main>
+        <doc-main v-if="!ready" :ready="ready" :key="1" :height="height - 80"></doc-main>
         <post-show
           v-else
           :key="2"
           :loading="loading"
           :ready="ready"
-          :height="height"
+          :height="height - 80"
           :path="path"
         ></post-show>
       </keep-alive>
@@ -39,17 +39,19 @@ export default {
   },
   data() {
     return {
-      height: "",
       ready: false,
       path: this.$route.query.PassageId,
       loading: true,
       qlist: undefined,
     };
   },
-  methods: {
-    getheight() {
-      this.height = document.body.clientHeight - 140;
+  props: {
+    height: {
+      type: Number,
+      default: 0,
     },
+  },
+  methods: {
     async routepath() {
       this.path = this.$route.query.PassageId;
       if (this.$route.path == "/doc") {
@@ -87,12 +89,7 @@ export default {
     },
   },
   async mounted() {
-    this.getheight();
     await this.routepath();
-    window.addEventListener("resize", this.getheight);
-  },
-  unmounted() {
-    window.removeEventListener("resize", this.getheight);
   },
 };
 </script>

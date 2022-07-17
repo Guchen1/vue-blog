@@ -28,8 +28,8 @@ export default {
   },
   mounted() {
     this.getheight();
-    window.addEventListener("resize", this.getheight);
-    window.addEventListener("resize", this.getwidth);
+    window.addEventListener("resize", this.getheight, { passive: true });
+    window.addEventListener("resize", this.getwidth, { passive: true });
   },
 
   unmounted() {

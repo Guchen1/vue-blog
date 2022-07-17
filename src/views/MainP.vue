@@ -219,18 +219,19 @@ export default {
       }
     },
   },
+
   deactivated() {
     this.oldpos = this.$refs.scs.wrap$.scrollTop;
     console.log(this.oldpos);
-    console.log(1);
+    console.log(2);
   },
   activated() {
     console.log(this.oldpos);
     setTimeout(() => {
       this.$refs.scs.wrap$.scrollTop = this.oldpos;
-    }, 300);
+    }, 20);
 
-    console.log(2);
+    console.log(1);
   },
 };
 </script>

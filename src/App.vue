@@ -72,19 +72,11 @@
               <template v-if="Component">
                 <Transition name="el-fade-in-linear" mode="out-in">
                   <KeepAlive exclude="PostShow">
-                    <Suspense>
-                      <!-- 主要内容 -->
-                      <component
-                        :height="height + 80"
-                        :is="Component"
-                        :key="$route.name"
-                      ></component>
-
-                      <!-- 加载中状态 -->
-                      <template #fallback>
-                        <LoadingPage></LoadingPage>
-                      </template>
-                    </Suspense>
+                    <component
+                      :height="height + 80"
+                      :is="Component"
+                      :key="$route.name"
+                    ></component>
                   </KeepAlive>
                 </Transition>
               </template> </RouterView

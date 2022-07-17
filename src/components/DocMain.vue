@@ -253,6 +253,8 @@ export default {
     setTimeout(() => {
       if (document.getElementById("main") != null) {
         this.widthp = document.getElementById("main").offsetWidth - 5;
+      }
+      if (document.getElementsByClassName("ssss")[0] != null) {
         this.mwidth = document.getElementsByClassName("ssss")[0].offsetWidth;
       }
     }, 300);

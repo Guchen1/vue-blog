@@ -39,7 +39,6 @@ export default {
     });
     this.$emit("loaded");
   },
-  unmounted() {},
   updated() {
     this.$emit("loaded");
   },

@@ -18,11 +18,11 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
-var _wr = function (type) {
-  var orig = history[type];
+let _wr = function (type) {
+  let orig = history[type];
   return function () {
-    var rv = orig.apply(this, arguments);
-    var e = new Event(type);
+    let rv = orig.apply(this, arguments);
+    let e = new Event(type);
     e.arguments = arguments;
     window.dispatchEvent(e);
     return rv;

@@ -27,7 +27,7 @@
         :key="p"
         :style="{
           'min-height': height + 'px',
-          'background-image': 'url(' + './img/' + i + ')',
+          'background-image': 'url(' + i + ')',
         }"
       ></div>
 
@@ -39,6 +39,11 @@
 </template>
 
 <script>
+let a = function (e) {
+  if (e.cancelable) {
+    e.preventDefault();
+  }
+};
 let scrollFunction = function (e) {
   e = e || window.event;
   e.preventDefault && e.preventDefault(); //禁止浏览器默认事件
@@ -175,33 +180,30 @@ export default {
         this.oldpage = this.page;
         return;
       }
-      if (this.page == this.maxpage)
-        this.ScrollTop(
-          this.height * this.page,
-          Math.abs(this.oldpage - this.page) >= 1
-            ? Math.abs(this.oldpage - this.page) * 200
-            : 200,
-          this.disabledoublelock
-        );
-      else
-        this.ScrollTop(
-          this.height * this.page,
-          Math.abs(this.oldpage - this.page) >= 1
-            ? Math.abs(this.oldpage - this.page) * 200
-            : 200,
-          this.disabledoublelock
-        );
+
+      this.ScrollTop(
+        this.height * this.page,
+        Math.abs(this.oldpage - this.page) >= 1
+          ? Math.abs(this.oldpage - this.page) * 200
+          : 200,
+        this.disabledoublelock
+      );
       this.disabledoublelock = 0;
       this.oldpage = this.page;
       //console.log(this.page);
     },
     lock() {
+      console.log(this.lock);
       if (this.lock == 1) {
         if (document.addEventListener) {
           //firefox
           document.addEventListener("DOMMouseScroll", scrollFunction, false);
         }
         //滚动滑轮触发scrollFunction方法  //ie 谷歌
+
+        document.body.addEventListener("touchmove", a, {
+          passive: false,
+        });
         window.addEventListener("mousewheel", scrollFunction, {
           passive: false,
         });
@@ -211,6 +213,12 @@ export default {
           document.removeEventListener("DOMMouseScroll", scrollFunction, false);
         }
         //滚动滑轮触发scrollFunction方法  //ie 谷歌
+        document.body.removeEventListener("touchmove", a, {
+          passive: false,
+        });
+        //document.body.removeEventListener("touchmove", this.preventDefault, {
+        //  passive: false,
+        //});
         window.removeEventListener("mousewheel", scrollFunction, {
           passive: false,
         });

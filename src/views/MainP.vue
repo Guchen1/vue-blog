@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      img: ["1.jpg", "2.jpg", "3.jpg", ""],
+      img: ["./img/1.jpg", "./img/2.jpg", "./img/3.jpg", ""],
     };
   },
   props: {

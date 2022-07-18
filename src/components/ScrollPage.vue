@@ -44,26 +44,14 @@ let a = function (e) {
     e.preventDefault();
   }
 };
+let b = function (e) {
+  if (e.cancelable) {
+    e.preventDefault();
+  }
+};
 let scrollFunction = function (e) {
   e = e || window.event;
   e.preventDefault && e.preventDefault(); //禁止浏览器默认事件
-  if (e.wheelDelta) {
-    //判断浏览器IE，谷歌滑轮事件
-    if (e.wheelDelta > 0) {
-      //当滑轮向上滚动时
-    }
-    if (e.wheelDelta < 0) {
-      //当滑轮向下滚动时
-    }
-  } else if (e.detail) {
-    //Firefox滑轮事件
-    if (e.detail > 0) {
-      //当滑轮向上滚动时
-    }
-    if (e.detail < 0) {
-      //当滑轮向下滚动时
-    }
-  }
 };
 export default {
   data() {
@@ -80,6 +68,7 @@ export default {
       allow: 0,
       oldpos: 0,
       imgs: [],
+      sec: 0,
     };
   },
 
@@ -104,8 +93,9 @@ export default {
     count() {
       if (this.lock != 1) {
         this.flock = 1;
-        if (this.$refs.scs.wrap$.scrollTop - this.maxpage * this.height > 10) {
+        if (this.$refs.scs.wrap$.scrollTop - this.maxpage * this.height > 40) {
           this.page = this.maxpage + 1;
+          this.oldcount = this.$refs.scs.wrap$.scrollTop;
           this.flock = 0;
           return;
         }
@@ -122,7 +112,6 @@ export default {
         }
         this.flock = 0;
       }
-
       this.oldcount = this.$refs.scs.wrap$.scrollTop;
     },
     ScrollTop(number = 0, time, fix = 0, dis = 0) {
@@ -156,20 +145,45 @@ export default {
 
   watch: {
     page() {
+      if (this.allow && this.page == this.maxpage) {
+        window.addEventListener("wheel", b, { passive: false });
+        window.addEventListener("touchmove", b, { passive: false });
+        setTimeout(() => {
+          window.removeEventListener("touchmove", b, {
+            passive: false,
+          });
+
+          window.removeEventListener("wheel", b, {
+            passive: false,
+          });
+        }, 100);
+        this.ScrollTop(this.height * this.page, 100, this.disabledoublelock, 1);
+
+        return;
+      }
       if (this.page < this.maxpage) this.allow = 0;
       //this.$refs.scs.scrollTo(0, 729 * this.page);
-      if (this.page != this.maxpage + 1) clearTimeout(this.timeout);
-      else if (!this.allow) {
-        this.page = this.maxpage;
+      clearTimeout(this.timeout);
+      clearTimeout(this.sec);
+      // eslint-disable-next-line no-empty
+      if (this.page != this.maxpage + 1) {
+      } else if (!this.allow) {
         this.allow = 1;
-      } else this.allow = 0;
-      this.lock = 1;
-      if (this.oldpage == this.maxpage + 1 && !this.disabledoublelock) {
+
+        this.page = this.maxpage;
         this.lock = 0;
-        this.timeout = setTimeout(() => {
+      } else this.allow = 0;
+
+      if (
+        this.oldpage == this.maxpage + 1 &&
+        !this.disabledoublelock &&
+        this.allow == 0
+      ) {
+        this.lock = 0;
+        this.sec = setTimeout(() => {
           this.lock = 1;
           this.ScrollTop(
-            this.height * this.page + 5,
+            this.height * this.page,
             Math.abs(this.oldpage - this.page) >= 1
               ? Math.abs(this.oldpage - this.page) * 200
               : 200,
@@ -180,20 +194,21 @@ export default {
         this.oldpage = this.page;
         return;
       }
-
-      this.ScrollTop(
-        this.height * this.page,
-        Math.abs(this.oldpage - this.page) >= 1
-          ? Math.abs(this.oldpage - this.page) * 200
-          : 200,
-        this.disabledoublelock
-      );
-      this.disabledoublelock = 0;
+      if (this.page != this.maxpage + 1) {
+        this.lock = 1;
+        this.ScrollTop(
+          this.height * this.page,
+          Math.abs(this.oldpage - this.page) >= 1
+            ? Math.abs(this.oldpage - this.page) * 200
+            : 200,
+          this.disabledoublelock
+        );
+        this.disabledoublelock = 0;
+      }
       this.oldpage = this.page;
       //console.log(this.page);
     },
     lock() {
-      console.log(this.lock);
       if (this.lock == 1) {
         if (document.addEventListener) {
           //firefox
@@ -204,7 +219,7 @@ export default {
         document.body.addEventListener("touchmove", a, {
           passive: false,
         });
-        window.addEventListener("mousewheel", scrollFunction, {
+        window.addEventListener("wheel", scrollFunction, {
           passive: false,
         });
       } else {
@@ -216,10 +231,8 @@ export default {
         document.body.removeEventListener("touchmove", a, {
           passive: false,
         });
-        //document.body.removeEventListener("touchmove", this.preventDefault, {
-        //  passive: false,
-        //});
-        window.removeEventListener("mousewheel", scrollFunction, {
+
+        window.removeEventListener("wheel", scrollFunction, {
           passive: false,
         });
       }

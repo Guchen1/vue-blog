@@ -1,7 +1,7 @@
 <template>
   <div class="common-layout" style="height: 100%">
     <el-container style="height: 100%">
-      <el-header style="padding: 0">
+      <el-header style="padding: 0" v-if="path != '/back'">
         <el-row class="center">
           <el-col :md="2" :xs="1" :sm="2" class="header"></el-col>
           <el-col :md="2" :xs="6" :sm="3" class="header"
@@ -142,7 +142,7 @@ export default {
     },
     checkIsMain() {
       setTimeout(() => {
-        if (this.$route.path == "/") {
+        if (this.$route.path == "/" || this.$route.path == "/back") {
           this.IsMain = 1;
         } else this.IsMain = 0;
       }, 250);
@@ -150,8 +150,8 @@ export default {
   },
   watch: {
     $route() {
-      this.hashc();
       this.checkIsMain();
+      this.hashc();
     },
   },
   mounted() {

@@ -183,7 +183,7 @@ export default {
         if (!this.pageset.has(this.input)) this.pageset.set(this.input, new Map());
         this.load = false;
         this.$axios
-          .post(this.$server, {
+          .post(this.$server + "/card", {
             id: this.page[this.current - 1],
           })
           .then((response) => {
@@ -244,9 +244,9 @@ export default {
   async beforeMount() {
     if (this.input == "" && this.$route.query.key != undefined) {
       this.input = this.$route.query.key;
-      await this.getpassage(this.$server + "?key=" + this.input);
+      await this.getpassage(this.$server + "/passages?key=" + this.input);
     } else {
-      await this.getpassage(this.$server);
+      await this.getpassage(this.$server + "/passages");
     }
   },
   mounted() {
@@ -310,7 +310,7 @@ export default {
         if (this.current == 1) this.loadfull();
         else this.current = 1;
       } else {
-        this.$axios.get(this.$server + "?key=" + this.input).then((res) => {
+        this.$axios.get(this.$server + "/passages?key=" + this.input).then((res) => {
           if (res.data == null) {
             map.set(this.input, []);
             this.passages = [];

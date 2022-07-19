@@ -60,7 +60,7 @@ export default {
         } else this.ready = false;
       }
       if (this.qlist == undefined) {
-        await this.$axios.get(this.$server).then((res) => {
+        await this.$axios.get(this.$server + "/passages").then((res) => {
           this.qlist = res.data;
           if (
             this.qlist.find((element) => element == this.path) == undefined &&

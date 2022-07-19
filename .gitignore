@@ -1,8 +1,9 @@
 .DS_Store
-node_modules
+!node_modules
 /dist
-
-
+node_modules/*
+node_modules/*/*
+!node_modules/@ckeditor
 # local env files
 .env.local
 .env.*.local
@@ -12,7 +13,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
+!node_modules/@ckeditor/ckeditor5-custom-build
 # Editor directories and files
 .idea
 .vscode

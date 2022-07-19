@@ -5,7 +5,10 @@
     class="center"
   >
     <el-page-header :content="detail.title" @back="$router.back()" />
-    jsjsjsj
+    <div
+      style="white-space: pre-wrap; line-height: initial; padding-top: 15px"
+      v-html="detail.content"
+    ></div>
   </div>
   <LoadingPage v-else />
 </template>
@@ -17,7 +20,11 @@ export default {
     LoadingPage,
   },
   props: ["loading", "ready", "height", "path"],
-  methods: {},
+  methods: {
+    a() {
+      this.width = window.innerWidth;
+    },
+  },
   name: "PostShow",
   data() {
     return {
@@ -27,18 +34,21 @@ export default {
       loaded: false,
     };
   },
+
   async mounted() {
     this.loaded = false;
-    await this.$axios.get(this.$server + "?details=" + this.path).then((res) => {
+    await this.$axios.get(this.$server + "/passages?details=" + this.path).then((res) => {
       this.detail = res.data;
       this.loaded = true;
     });
-    this.detail = { title: "第一篇", content: "这是一篇文章" };
-    window.addEventListener("resize", () => {
-      this.width = window.innerWidth;
-    });
+
+    window.addEventListener("resize", this.a);
     this.$emit("loaded");
   },
+  unmounted() {
+    window.removeEventListener("resize", this.a);
+  },
+
   updated() {
     this.$emit("loaded");
   },

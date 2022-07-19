@@ -25,6 +25,12 @@ const routes = [{
             import ("../views/DocP.vue"),
     },
     {
+        path: "/back",
+        name: "back",
+        component: () =>
+            import ("../views/BackPage.vue"),
+    },
+    {
         path: "/:catchAll(.*)",
         name: "404",
         component: () =>

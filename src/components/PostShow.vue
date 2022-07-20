@@ -4,20 +4,26 @@
     :style="{ width: width >= 1024 ? '70%' : '90%', 'min-height': height + 'px' }"
     class="center"
   >
-    <el-page-header :content="detail.title" @back="$router.back()" />
-    <div
-      style="white-space: pre-wrap; line-height: initial; padding-top: 15px"
-      v-html="detail.content"
-    ></div>
+    <el-page-header
+      :content="detail.title"
+      @back="
+        loaded = false;
+        $router.back();
+      "
+    />
+    <div style="height: 20px"></div>
+    <c-editor :disabled="editorDisabled" :maybeEditorData="editorData"></c-editor>
   </div>
   <LoadingPage v-else />
 </template>
 
 <script>
+import CEditor from "@/components/CEditor.vue";
 import LoadingPage from "./LoadingPage.vue";
 export default {
   components: {
     LoadingPage,
+    CEditor,
   },
   props: ["loading", "ready", "height", "path"],
   methods: {
@@ -28,6 +34,10 @@ export default {
   name: "PostShow",
   data() {
     return {
+      q: 0,
+
+      editorDisabled: true,
+      editorData: "",
       list: [],
       width: window.innerWidth,
       detail: {},
@@ -35,11 +45,12 @@ export default {
     };
   },
 
-  async mounted() {
+  mounted() {
     this.loaded = false;
-    await this.$axios.get(this.$server + "/passages?details=" + this.path).then((res) => {
+    this.$axios.get(this.$server + "/passages?details=" + this.path).then((res) => {
       this.detail = res.data;
       this.loaded = true;
+      this.editorData = this.detail.content;
     });
 
     window.addEventListener("resize", this.a);

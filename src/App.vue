@@ -2,7 +2,7 @@
   <div class="common-layout" style="height: 100%">
     <el-container style="height: 100%">
       <el-header style="padding: 0" v-if="path != '/back'">
-        <el-row class="center">
+        <el-row class="center1">
           <el-col :md="2" :xs="1" :sm="2" class="header"></el-col>
           <el-col :md="2" :xs="6" :sm="3" class="header"
             ><div class="" style="font-weight: bold">My Blog</div></el-col
@@ -65,7 +65,9 @@
         >
           <el-scrollbar
             ref="sc"
-            :max-height="IsMain ? height + 80 + 'px' : height + 'px'"
+            :max-height="
+              IsMain ? (IsBack ? height + 140 + 'px' : height + 80 + 'px') : height + 'px'
+            "
             width="100%"
           >
             <RouterView v-slot="{ Component }">
@@ -83,7 +85,7 @@
           ></el-scrollbar>
         </el-main>
         <el-footer v-if="!IsMain"
-          ><div class="center" style="text-align: center">
+          ><div class="center1" style="text-align: center">
             Copyright © 2022
           </div></el-footer
         >
@@ -115,6 +117,7 @@ export default {
       path: window.location.href,
       height: document.body.clientHeight - 140,
       IsMain: 0,
+      IsBack: 0,
     };
   },
   methods: {
@@ -144,6 +147,7 @@ export default {
       setTimeout(() => {
         if (this.$route.path == "/" || this.$route.path == "/back") {
           this.IsMain = 1;
+          this.IsBack = 1;
         } else this.IsMain = 0;
       }, 250);
     },
@@ -162,6 +166,7 @@ export default {
     this.getheight();
     window.addEventListener("resize", this.getheight);
   },
+
   unmounted() {
     window.removeEventListener("resize", this.getheight);
   },
@@ -189,7 +194,7 @@ export default {
 }
 .text {
 }
-.center {
+.center1 {
   line-height: 60px;
   height: 60px;
   font-size: 16px !important;

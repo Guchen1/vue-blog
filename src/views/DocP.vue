@@ -1,17 +1,16 @@
 <template>
   <div :style="{ 'min-height': height - 80 + 'px' }">
     <transition name="el-fade-in-linear" mode="out-in">
-      <keep-alive :key="1" exclude="PostShow">
-        <doc-main v-if="!ready" :ready="ready" :key="1" :height="height - 80"></doc-main>
-        <post-show
-          v-else
-          :key="2"
-          :loading="loading"
-          :ready="ready"
-          :height="height - 80"
-          :path="path"
-        ></post-show>
-      </keep-alive>
+      <doc-main v-if="!ready" :ready="ready" :key="1" :height="height - 80"></doc-main>
+    </transition>
+    <transition name="el-fade-in-linear" mode="out-in">
+      <post-show
+        v-if="ready"
+        :key="2"
+        :ready="ready"
+        :height="height - 80"
+        :path="path"
+      ></post-show>
     </transition>
   </div>
 </template>
@@ -41,7 +40,7 @@ export default {
     return {
       ready: false,
       path: this.$route.query.PassageId,
-      loading: true,
+      loading: false,
       qlist: undefined,
     };
   },

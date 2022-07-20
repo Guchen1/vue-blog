@@ -51,11 +51,13 @@
 </template>
 
 <script>
-import { Calendar } from "@element-plus/icons-vue";
-import { View } from "@element-plus/icons-vue";
+// eslint-disable-next-line
+import { Calendar, View } from "@element-plus/icons-vue";
+
 export default {
   components: {
     Calendar,
+    // eslint-disable-next-line
     View,
   },
   data() {

@@ -12,5 +12,5 @@ const app = createApp(App)
     //console.log(vConsole)
 app.use(router).use(ElementPlus)
 app.mount('#app')
-app.config.globalProperties.$server = "http://192.168.31.87:8080"
+app.config.globalProperties.$server = "http://192.168.31.87:8081"
 app.config.globalProperties.$axios = axios;

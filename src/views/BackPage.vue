@@ -9,7 +9,7 @@
 
 <script>
 import CKEditor from "@ckeditor/ckeditor5-vue";
-import DecoupledEditor from "@ckeditor/ckeditor5-custom-build";
+import DecoupledEditor from "chen-ck-build";
 
 export default {
   components: {

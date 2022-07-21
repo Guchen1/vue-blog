@@ -21,6 +21,7 @@
 import CEditor from "@/components/CEditor.vue";
 import LoadingPage from "./LoadingPage.vue";
 export default {
+  name: "PostShow",
   components: {
     LoadingPage,
     CEditor,
@@ -31,7 +32,7 @@ export default {
       this.width = window.innerWidth;
     },
   },
-  name: "PostShow",
+
   data() {
     return {
       q: 0,

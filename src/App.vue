@@ -40,8 +40,8 @@
             ><router-link
               class="el-link gu --el-font-size-medium"
               style="font-size: 16px; width: 100%"
-              to="/setting"
-              >设置</router-link
+              to="/link"
+              >友链</router-link
             ></el-col
           ><el-col
             :md="2"
@@ -77,7 +77,7 @@
                     <component
                       :height="height + 80"
                       :is="Component"
-                      :key="$route.name"
+                      :width="width"
                     ></component>
                   </KeepAlive>
                 </Transition>
@@ -96,12 +96,12 @@
 
 <script>
 import LoadingPage from "./components/LoadingPage.vue";
-//import { Edit } from '@element-plus/icons-vue'
-var _wr = function (type) {
-  var orig = history[type];
+
+let _wr = function (type) {
+  let orig = history[type];
   return function () {
-    var rv = orig.apply(this, arguments);
-    var e = new Event(type);
+    let rv = orig.apply(this, arguments);
+    let e = new Event(type);
     e.arguments = arguments;
     window.dispatchEvent(e);
     return rv;
@@ -118,15 +118,20 @@ export default {
       height: document.body.clientHeight - 140,
       IsMain: 0,
       IsBack: 0,
+      width: 0,
     };
   },
   methods: {
     getheight() {
-      this.height = document.body.clientHeight - 140;
+      setTimeout(() => {
+        this.height = document.body.clientHeight - 140;
+        this.width = document.body.clientWidth;
+      }, 10);
+
       setTimeout(() => {
         clearInterval(a);
       }, 400);
-      var a = setInterval(() => {
+      let a = setInterval(() => {
         this.$refs.sc.update();
       }, 100);
     },
@@ -145,10 +150,13 @@ export default {
     },
     checkIsMain() {
       setTimeout(() => {
-        if (this.$route.path == "/" || this.$route.path == "/back") {
+        if (this.$route.path == "/" || this.$route.path.search("/back") != -1) {
           this.IsMain = 1;
           this.IsBack = 1;
-        } else this.IsMain = 0;
+        } else {
+          this.IsMain = 0;
+          this.IsBack = 0;
+        }
       }, 250);
     },
   },
@@ -159,9 +167,13 @@ export default {
     },
   },
   mounted() {
-    if (this.$route.path == "/") {
+    if (this.$route.path == "/" || this.$route.path.search("/back") != -1) {
       this.IsMain = 1;
-    } else this.IsMain = 0;
+      this.IsBack = 1;
+    } else {
+      this.IsMain = 0;
+      this.IsBack = 0;
+    }
     this.hashc();
     this.getheight();
     window.addEventListener("resize", this.getheight);
@@ -185,15 +197,12 @@ export default {
   transform: scale(0.9);
 }
 
-:root {
-}
 .header {
   border-bottom: 2px solid var(--el-border-color);
   height: 60px;
   text-align: center;
 }
-.text {
-}
+
 .center1 {
   line-height: 60px;
   height: 60px;

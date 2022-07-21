@@ -1,54 +1,93 @@
 <template>
-  <el-container style="height: 100%; width: 100%">
-    <el-aside width="190px" v-if="width >= 576">
-      <el-menu><el-sub-menu index="1">123</el-sub-menu></el-menu></el-aside
+  <el-container style="width: 100%" :style="{ height: height + 60 + 'px' }">
+    <el-menu
+      :collapse="width < 678"
+      :router="true"
+      :default-active="$route.path"
+      style="height: 100%"
     >
-    <el-main class="m" :style="{ 'max-width': width - 190 + 'px' }">
-      <CEditor></CEditor>
+      <el-menu-item class="p" index="/back"
+        ><el-icon><Grid /></el-icon
+        ><template #title><span class="p">总览</span></template></el-menu-item
+      ><el-menu-item index="/back/mainset"
+        ><el-icon><Folder /></el-icon
+        ><template #title><span class="p">主页设置</span></template></el-menu-item
+      >
+      <el-menu-item class="p" index="/back/passage"
+        ><el-icon><EditPen /></el-icon
+        ><template #title><span class="p">文章管理</span></template></el-menu-item
+      >
+      <el-menu-item class="p" index="/back/friend"
+        ><el-icon><User /></el-icon
+        ><template #title><span class="p">友链设置</span></template></el-menu-item
+      >
+      <el-menu-item class="p" index="/back/etc"
+        ><el-icon><Paperclip /></el-icon
+        ><template #title><span class="p">杂项</span></template></el-menu-item
+      >
+    </el-menu>
+    <el-main class="m">
+      <el-scrollbar>
+        <RouterView v-slot="{ Component }">
+          <template v-if="Component">
+            <Transition name="el-fade-in-linear" mode="out-in">
+              <KeepAlive>
+                <component :height="height" :is="Component" :width="width"></component>
+              </KeepAlive>
+            </Transition>
+          </template>
+        </RouterView>
+      </el-scrollbar>
     </el-main>
   </el-container>
 </template>
 
 <script>
 import CEditor from "../components/CEditor.vue";
-
+import { EditPen, Grid, User, Paperclip, Folder } from "@element-plus/icons-vue";
 export default {
+  name: "BackPage",
   components: {
     // eslint-disable-next-line
     CEditor,
+    EditPen,
+    Grid,
+    User,
+    Paperclip,
+    Folder,
   },
-  methods: {
-    getwidth() {
-      this.width = document.body.clientWidth;
-      this.px = this.width - 190 + "px";
-    },
-  },
+
   props: {
     height: {
       type: Number,
       default: 0,
     },
+    width: {
+      type: Number,
+      default: 1000,
+    },
   },
-  activated() {
-    this.getwidth();
-    window.addEventListener("resize", this.getwidth);
+  mounted() {
+    this.$notify({
+      title: "提示",
+      message: "欢迎来到后台管理界面",
+      type: "success",
+    });
   },
-  deactivated() {
-    window.removeEventListener("resize", this.getwidth);
-  },
+
   data() {
-    return {
-      width: 0,
-      px: "0px",
-    };
+    return {};
   },
 };
 </script>
 <style>
 .m {
-  padding: 0;
   flex-wrap: wrap;
   overflow-x: hidden;
+}
+.p {
+  text-align: center;
+  width: 100%;
 }
 .ck {
 }

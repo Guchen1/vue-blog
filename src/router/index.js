@@ -7,10 +7,10 @@ const routes = [{
             import ("../views/LogIn.vue"),
     },
     {
-        path: "/setting",
-        name: "settings",
+        path: "/link",
+        name: "link",
         component: () =>
-            import ("../views/SettingChange.vue"),
+            import ("../views/FriendLink.vue"),
     },
     {
         path: "/",
@@ -29,6 +29,18 @@ const routes = [{
         name: "back",
         component: () =>
             import ("../views/BackPage.vue"),
+        children: [{
+            path: "",
+            name: "overview",
+            component: () =>
+                import ("../views/BackPage/OverView.vue")
+        }, {
+            name: "mainset",
+            path: 'mainset',
+            // 单个router-view用：component
+            component: () =>
+                import ("../views/BackPage/MainSet.vue")
+        }]
     },
     {
         path: "/:catchAll(.*)",

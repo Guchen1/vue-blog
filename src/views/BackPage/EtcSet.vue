@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  name: "EtcSet",
   created() {},
   data() {
     return {};

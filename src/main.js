@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+
 import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css'
@@ -10,7 +11,12 @@ import 'default-passive-events'
 const app = createApp(App)
     //const vConsole = new VConsole()
     //console.log(vConsole)
+
+
+
 app.use(router).use(ElementPlus)
+
+
 app.mount('#app')
 app.config.globalProperties.$server = "http://124.223.53.17:8081"
 app.config.globalProperties.$axios = axios;

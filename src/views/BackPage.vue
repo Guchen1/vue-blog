@@ -39,14 +39,12 @@
         <RouterView v-slot="{ Component }">
           <template v-if="Component">
             <Transition name="el-fade-in-linear" mode="out-in">
-              <KeepAlive>
-                <component
-                  :height="height"
-                  :key="$route.name"
-                  :is="Component"
-                  :width="width"
-                ></component>
-              </KeepAlive>
+              <component
+                :height="height"
+                :key="$route.name"
+                :is="Component"
+                :width="width"
+              ></component>
             </Transition>
           </template>
         </RouterView>
@@ -83,11 +81,14 @@ export default {
   },
   deactivated() {
     const q = document.getElementsByClassName("el-popper");
-    if (q.length > 0) {
-      for (let i = 0; i < q.length; i++) {
-        q[i].setAttribute("aria-hidden", "true");
+    setTimeout(() => {
+      if (q.length > 0) {
+        for (let i = 0; i < q.length; i++) {
+          q[i].setAttribute("aria-hidden", "true");
+          q[i].style.display = "none";
+        }
       }
-    }
+    }, 10);
   },
   mounted() {
     this.$notify({

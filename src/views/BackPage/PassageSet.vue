@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  name: "PassageSet",
   created() {},
   data() {
     return {};

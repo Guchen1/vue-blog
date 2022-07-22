@@ -81,6 +81,14 @@ export default {
       default: 1000,
     },
   },
+  deactivated() {
+    const q = document.getElementsByClassName("el-popper");
+    if (q.length > 0) {
+      for (let i = 0; i < q.length; i++) {
+        q[i].setAttribute("aria-hidden", "true");
+      }
+    }
+  },
   mounted() {
     this.$notify({
       title: "提示",

@@ -1,63 +1,46 @@
 <template>
-  <div class="common-layout" style="height: 100%">
+  <div class="common-layout" style="height: 100%; overflow-y: hidden">
     <el-container style="height: 100%">
       <el-header style="padding: 0" v-if="path != '/back'">
-        <el-row class="center1">
-          <el-col :md="2" :xs="1" :sm="2" class="header"></el-col>
-          <el-col :md="2" :xs="6" :sm="3" class="header"
-            ><div class="" style="font-weight: bold">My Blog</div></el-col
-          ><el-col :md="10" :xs="4" :sm="9" class="header"></el-col
-          ><el-col
-            :md="2"
-            :xs="3"
-            :sm="2"
-            class="header"
-            :class="{ active: path == '/' }"
-            ref="to"
-            ><router-link class="el-link gu" style="font-size: 16px; width: 100%" to="/"
-              >主页</router-link
-            ></el-col
-          ><el-col
-            :md="2"
-            :xs="3"
-            :sm="2"
-            class="header"
-            ref="todoc"
-            :class="{ active: path == '/doc' }"
-            ><router-link
-              class="el-link gu --el-font-size-medium"
-              style="font-size: 16px; width: 100%"
-              :to="{ name: 'doc', query: {} }"
-              >文章</router-link
-            ></el-col
-          ><el-col
-            :md="2"
-            :xs="3"
-            :sm="2"
-            class="header"
-            ref="tosetting"
-            :class="{ active: path == '/setting' }"
-            ><router-link
-              class="el-link gu --el-font-size-medium"
-              style="font-size: 16px; width: 100%"
-              to="/link"
-              >友链</router-link
-            ></el-col
-          ><el-col
-            :md="2"
-            :xs="3"
-            :sm="2"
-            class="header"
-            ref="tologin"
-            :class="{ active: path == '/login' }"
-            ><router-link
-              class="el-link gu --el-font-size-medium"
-              style="font-size: 16px; width: 100%"
-              to="/login"
-              >登录</router-link
-            ></el-col
-          ><el-col :md="2" :xs="1" :sm="2" class="header"></el-col></el-row
-      ></el-header>
+        <el-menu
+          class="center1"
+          mode="horizontal"
+          :ellipsis="false"
+          :router="true"
+          :default-active="$route.path"
+          :style="{
+            'padding-left': width < 449 ? (width >= 365 ? '10px' : '0') : '10%',
+            'padding-right': width < 449 ? '0' : '10%',
+          }"
+        >
+          <div style="font-weight: bold" v-if="width >= 365">My Blog</div>
+          <div style="flex-grow: 1" v-if="width >= 365"></div>
+          <el-menu-item
+            style="font-size: 15px"
+            :class="width >= 365 ? '' : 'part'"
+            index="/"
+            >主页</el-menu-item
+          >
+          <el-menu-item
+            style="font-size: 15px"
+            :class="width >= 365 ? '' : 'part'"
+            index="/doc"
+            >文章</el-menu-item
+          >
+          <el-menu-item
+            style="font-size: 15px"
+            :class="width >= 365 ? '' : 'part'"
+            index="/link"
+            >友链</el-menu-item
+          >
+          <el-menu-item
+            style="font-size: 15px"
+            :class="width >= 365 ? '' : 'part'"
+            index="/login"
+            >登录</el-menu-item
+          >
+        </el-menu>
+      </el-header>
       <el-container>
         <el-main
           :style="{ padding: IsMain ? '0px' : '20px' }"
@@ -73,11 +56,12 @@
             <RouterView v-slot="{ Component }">
               <template v-if="Component">
                 <Transition name="el-fade-in-linear" mode="out-in">
-                  <KeepAlive exclude="PostShow">
+                  <KeepAlive :key="11" exclude="PostShow">
                     <component
                       :height="height + 80"
                       :is="Component"
                       :width="width"
+                      :key="$route.path.search('/back') != -1 ? '/back' : $route.path"
                     ></component>
                   </KeepAlive>
                 </Transition>
@@ -190,7 +174,9 @@ export default {
 .scale-leave-active {
   transition: all 0.5s ease;
 }
-
+.scale-leave-active {
+  display: none;
+}
 .scale-enter-from,
 .scale-leave-to {
   opacity: 0;
@@ -217,5 +203,8 @@ export default {
 }
 .el-main {
   padding-bottom: 0px;
+}
+.part {
+  width: 25%;
 }
 </style>

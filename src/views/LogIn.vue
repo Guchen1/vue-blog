@@ -9,6 +9,16 @@ export default defineComponent({
   data() {
     return {};
   },
+  mounted() {
+    this.$router.push({
+      path: "/back",
+    });
+  },
+  activated() {
+    this.$router.push({
+      path: "/back",
+    });
+  },
   props: {
     height: {
       type: Number,

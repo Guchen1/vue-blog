@@ -1,11 +1,19 @@
 <template>
-  <el-container style="width: 100%" :style="{ height: height + 60 + 'px' }">
+  <el-container
+    style="width: 100%; overflow-y: hidden"
+    :style="{ height: height + 60 + 'px' }"
+  >
     <el-menu
       :collapse="width < 678"
       :router="true"
       :default-active="$route.path"
       style="height: 100%"
     >
+      <el-menu-item class="p" index="/"
+        ><el-icon><Back /></el-icon
+        ><template #title><span class="p">返回主页</span></template></el-menu-item
+      >
+      <hr />
       <el-menu-item class="p" index="/back"
         ><el-icon><Grid /></el-icon
         ><template #title><span class="p">总览</span></template></el-menu-item
@@ -13,15 +21,15 @@
         ><el-icon><Folder /></el-icon
         ><template #title><span class="p">主页设置</span></template></el-menu-item
       >
-      <el-menu-item class="p" index="/back/passage"
+      <el-menu-item class="p" index="/back/passageset"
         ><el-icon><EditPen /></el-icon
         ><template #title><span class="p">文章管理</span></template></el-menu-item
       >
-      <el-menu-item class="p" index="/back/friend"
+      <el-menu-item class="p" index="/back/friendset"
         ><el-icon><User /></el-icon
         ><template #title><span class="p">友链设置</span></template></el-menu-item
       >
-      <el-menu-item class="p" index="/back/etc"
+      <el-menu-item class="p" index="/back/etcset"
         ><el-icon><Paperclip /></el-icon
         ><template #title><span class="p">杂项</span></template></el-menu-item
       >
@@ -32,7 +40,12 @@
           <template v-if="Component">
             <Transition name="el-fade-in-linear" mode="out-in">
               <KeepAlive>
-                <component :height="height" :is="Component" :width="width"></component>
+                <component
+                  :height="height"
+                  :key="$route.name"
+                  :is="Component"
+                  :width="width"
+                ></component>
               </KeepAlive>
             </Transition>
           </template>
@@ -44,7 +57,7 @@
 
 <script>
 import CEditor from "../components/CEditor.vue";
-import { EditPen, Grid, User, Paperclip, Folder } from "@element-plus/icons-vue";
+import { EditPen, Grid, User, Paperclip, Folder, Back } from "@element-plus/icons-vue";
 export default {
   name: "BackPage",
   components: {
@@ -55,6 +68,7 @@ export default {
     User,
     Paperclip,
     Folder,
+    Back,
   },
 
   props: {

@@ -30,17 +30,38 @@ const routes = [{
         component: () =>
             import ("../views/BackPage.vue"),
         children: [{
-            path: "",
-            name: "overview",
-            component: () =>
-                import ("../views/BackPage/OverView.vue")
-        }, {
-            name: "mainset",
-            path: 'mainset',
-            // 单个router-view用：component
-            component: () =>
-                import ("../views/BackPage/MainSet.vue")
-        }]
+                path: "",
+                name: "overview",
+                component: () =>
+                    import ("../views/BackPage/OverView.vue")
+            }, {
+                name: "mainset",
+                path: 'mainset',
+                // 单个router-view用：component
+                component: () =>
+                    import ("../views/BackPage/MainSet.vue")
+            },
+            {
+                name: "friendset",
+                path: 'friendset',
+                // 单个router-view用：component
+                component: () =>
+                    import ("../views/BackPage/FriendSet.vue")
+            }, {
+                name: "passageSet",
+                path: 'passageSet',
+                // 单个router-view用：component
+                component: () =>
+                    import ("../views/BackPage/PassageSet.vue")
+            },
+            {
+                name: "etcset",
+                path: 'etcset',
+                // 单个router-view用：component
+                component: () =>
+                    import ("../views/BackPage/EtcSet.vue")
+            },
+        ]
     },
     {
         path: "/:catchAll(.*)",

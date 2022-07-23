@@ -21,9 +21,11 @@
         "core-js": "^3.8.3",
         "default-passive-events": "^2.0.0",
         "element-plus": "^2.1.8",
+        "node-html-parser": "^5.3.3",
         "vconsole": "^3.14.6",
         "vue": "^3.2.37",
-        "vue-router": "^4.0.14"
+        "vue-router": "^4.0.14",
+        "vuex": "^4.0.2"
     },
     "devDependencies": {
         "@babel/core": "^7.12.16",

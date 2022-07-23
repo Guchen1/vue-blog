@@ -35,7 +35,7 @@
       >
     </el-menu>
     <el-main class="m">
-      <el-scrollbar>
+      <el-scrollbar :max-height="height + 60 + 'px'">
         <RouterView v-slot="{ Component }">
           <template v-if="Component">
             <Transition name="el-fade-in-linear" mode="out-in">

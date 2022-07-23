@@ -1,7 +1,7 @@
 <template>
   <div class="common-layout" style="height: 100%; overflow-y: hidden">
     <el-container style="height: 100%">
-      <el-header style="padding: 0" v-if="path != '/back'">
+      <el-header style="padding: 0" v-if="!(this.$route.path.search('/back') != -1)">
         <el-menu
           class="center1"
           mode="horizontal"
@@ -119,19 +119,7 @@ export default {
         this.$refs.sc.update();
       }, 100);
     },
-    hashc() {
-      this.path = window.location.href;
-      this.path = this.path.substring(7).substring(this.path.substring(7).search("/"));
-      if (this.path.substring(1).search("/") != -1) {
-        this.path = this.path.substring(0, this.path.substring(1).search("/") + 1);
-      }
-      if (this.path.search("\\?") != -1) {
-        this.path = this.path.substring(0, this.path.search("\\?"));
-      }
-      if (this.path == "") {
-        this.path = "/";
-      }
-    },
+
     checkIsMain() {
       setTimeout(() => {
         if (this.$route.path == "/" || this.$route.path.search("/back") != -1) {
@@ -147,8 +135,28 @@ export default {
   watch: {
     $route() {
       this.checkIsMain();
-      this.hashc();
     },
+  },
+  async created() {
+    this.$store.commit("push", {
+      mainimg: ["./img/1.jpg", "./img/2.jpg", "./img/3.jpg", "./img/p1.jpg"],
+      links: [
+        {
+          name: "Chen",
+          details: "Chen is a web developer",
+          img: "/img/my.bmp",
+          state: 1,
+          sort: 2,
+        },
+        {
+          raw: "`<div>123</div>`",
+          name: "Chen",
+          un: "x1",
+          state: 2,
+          sort: 1,
+        },
+      ],
+    });
   },
   mounted() {
     if (this.$route.path == "/" || this.$route.path.search("/back") != -1) {
@@ -158,7 +166,7 @@ export default {
       this.IsMain = 0;
       this.IsBack = 0;
     }
-    this.hashc();
+
     this.getheight();
     window.addEventListener("resize", this.getheight);
   },
@@ -207,4 +215,5 @@ export default {
 .part {
   width: 25%;
 }
+
 </style>

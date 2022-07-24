@@ -147,13 +147,24 @@ export default {
           img: "/img/my.bmp",
           state: 1,
           sort: 2,
+          tmpsort: 2,
+        },
+        {
+          name: "Chen3",
+          details: "Chen is a web developer",
+          img: "/img/my.bmp",
+          state: 1,
+          sort: 3,
+          tmpsort: 3,
         },
         {
           raw: "`<div>123</div>`",
           name: "Chen",
-          un: "x1",
+          variables: "",
+          parsed: null,
           state: 2,
           sort: 1,
+          tmpsort: 1,
         },
       ],
     });
@@ -168,11 +179,11 @@ export default {
     }
 
     this.getheight();
-    window.addEventListener("resize", this.getheight);
+    window.addEventListener("resize", this.getheight, { passive: true });
   },
 
   unmounted() {
-    window.removeEventListener("resize", this.getheight);
+    window.removeEventListener("resize", this.getheight, { passive: true });
   },
 };
 </script>
@@ -215,5 +226,4 @@ export default {
 .part {
   width: 25%;
 }
-
 </style>

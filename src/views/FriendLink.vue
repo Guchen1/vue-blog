@@ -7,11 +7,11 @@
         'padding-right': width > 700 ? '15%' : '5%',
       }"
       ><el-col
-        :span="width > 1440 ? 6 : width > 1200 ? 8 : width < 480 ? 24 : 12"
+        :span="width > 1890 ? 6 : width > 1200 ? 8 : width < 580 ? 24 : 12"
         style="padding: 5px"
         v-for="(link, index) in links"
         :key="index"
-        ><LinkCard :link="link"></LinkCard
+        ><LinkCard :link="link" :hei="hei"></LinkCard
       ></el-col>
     </el-row>
   </div>
@@ -31,7 +31,16 @@ export default defineComponent({
   },
   computed: {
     links() {
-      return this.$store.getters.getlinks;
+      let a = this.$store.getters.getlinks;
+      let order = function (a, b) {
+        return a.sort - b.sort;
+      };
+      a.sort(order);
+      console.log(a);
+      return a;
+    },
+    hei() {
+      return this.$store.getters.getcardheight;
     },
   },
   props: {

@@ -4,7 +4,7 @@ import { createStore } from 'vuex'
 const store = createStore({
     state() {
         return {
-            'meta-info': {},
+            'meta-info': { cardheight: 100 },
         }
     },
     mutations: {
@@ -18,7 +18,11 @@ const store = createStore({
     getters: {
         getlinks(state) {
             return state['meta-info'].links;
+        },
+        getcardheight(state) {
+            return state['meta-info'].cardheight;
         }
+
     }
 })
 export default store

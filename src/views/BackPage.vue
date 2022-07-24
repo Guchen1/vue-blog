@@ -7,7 +7,7 @@
       :collapse="width < 678"
       :router="true"
       :default-active="$route.path"
-      style="height: 100%"
+      style="height: 100%; min-width: 63px"
     >
       <el-menu-item class="p" index="/"
         ><el-icon><Back /></el-icon

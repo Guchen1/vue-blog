@@ -6,11 +6,21 @@
     :body-style="{ height: hei - 40 + 'px' }"
     ><el-avatar :size="hei - 40" :src="link.img" />
     <div
-      :style="{ height: hei - 40 + 'px', width: 'calc(100% - 86px)' }"
-      style="display: inline-block; vertical-align: top"
+      :style="{
+        height: hei - 40 + 'px',
+        width: 'calc( 100% - ' + t + ' )',
+      }"
+      style="
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        vertical-align: top;
+        line-height: 16px;
+      "
     >
       <div style="text-align: center; font-weight: bold">{{ link.name }}</div>
-      <div style="word-wrap: break-word; text-align: center; padding-top: 15px">
+      <br style="" />
+      <div style="word-wrap: break-word; text-align: center">
         {{ link.details }}
       </div>
     </div>
@@ -22,31 +32,20 @@
 import InstantRender from "./InstantRender.vue";
 export default {
   data() {
-    return {
-      hei: 126,
-    };
+    return {};
   },
   components: {
     InstantRender,
   },
-  props: { link: { type: Object } },
-  mounted() {},
+  computed: {
+    t() {
+      return this.hei - 40 + "px";
+    },
+  },
+  props: { link: { type: Object }, hei: { type: Number, default: 0 } },
 
   methods: {},
 };
 </script>
 
-<style>
-.name {
-  text-align: center;
-  font-weight: bold;
-}
-.intro {
-  word-wrap: break-word;
-  text-align: center;
-  padding-top: 10px;
-}
-.textm {
-  display: inline-block;
-}
-</style>
+<style></style>

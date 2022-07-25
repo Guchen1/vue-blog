@@ -1,8 +1,10 @@
 <template>
   <el-card
+    @click="go(link.link)"
     v-if="link.state == 1"
     shadow="hover"
     :style="{ height: hei + 'px' }"
+    style="cursor: pointer"
     :body-style="{ height: hei - 40 + 'px' }"
     ><el-avatar :size="hei - 40" :src="link.img" />
     <div
@@ -25,7 +27,14 @@
       </div>
     </div>
   </el-card>
-  <InstantRender v-else :id="link.un"></InstantRender>
+  <InstantRender
+    @click="go(link.link)"
+    v-else
+    :hei="hei"
+    :id="link.un"
+    :instant="link"
+    style="cursor: pointer"
+  ></InstantRender>
 </template>
 
 <script>
@@ -44,7 +53,11 @@ export default {
   },
   props: { link: { type: Object }, hei: { type: Number, default: 0 } },
 
-  methods: {},
+  methods: {
+    go(url) {
+      window.location.href = url;
+    },
+  },
 };
 </script>
 

@@ -240,11 +240,11 @@ export default {
   },
 
   deactivated() {
-    this.oldpos = this.$refs.scs.wrap$.scrollTop;
+    if (this.$refs.scs != null) this.oldpos = this.$refs.scs.wrap$.scrollTop;
   },
   activated() {
     setTimeout(() => {
-      this.$refs.scs.wrap$.scrollTop = this.oldpos;
+      if (this.$refs.scs != null) this.$refs.scs.wrap$.scrollTop = this.oldpos;
     }, 20);
   },
 };

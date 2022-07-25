@@ -28,11 +28,20 @@ export default {
       type: String,
       default: "",
     },
+    isDark: {
+      type: Boolean,
+      default: false,
+    },
   },
   watch: {
-    editorData() {
-      console.log(this.editorData);
-      c = this.editorData;
+    isDark() {
+      if (this.isDark) {
+        document.getElementsByClassName("ck-editor__editable")[0].style.background =
+          "#141414";
+      } else {
+        document.getElementsByClassName("ck-editor__editable")[0].style.background =
+          "#ffffff";
+      }
     },
   },
 
@@ -40,11 +49,19 @@ export default {
     if (this.disabled) {
       this.editorData = this.maybeEditorData;
       setTimeout(() => {
+        if (this.isDark) {
+          document.getElementsByClassName("ck-editor__editable")[0].style.background =
+            "#141414";
+        } else {
+          document.getElementsByClassName("ck-editor__editable")[0].style.background =
+            "#ffffff";
+        }
         document.getElementsByClassName("ck-editor__top")[0].style.display = "none";
-      }, 100);
+      }, 90);
 
       return;
     }
+
     await this.$axios.get(this.$server + "/words?passage=1").then((res) => {
       this.editorData = res.data;
     });

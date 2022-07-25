@@ -7,7 +7,7 @@ module.exports = defineConfig({
 
 })
 module.exports = {
-
+    runtimeCompiler: true,
     configureWebpack: config => {
         if (process.env.NODE_ENV === "production") {
             config.externals = { // 不会被打包的库

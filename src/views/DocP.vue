@@ -5,6 +5,7 @@
     </transition>
     <transition name="el-fade-in-linear" mode="out-in">
       <post-show
+        :isDark="isDark"
         v-if="ready"
         :key="2"
         :ready="ready"
@@ -48,6 +49,10 @@ export default {
     height: {
       type: Number,
       default: 0,
+    },
+    isDark: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

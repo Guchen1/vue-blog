@@ -5,6 +5,7 @@ const store = createStore({
     state() {
         return {
             'meta-info': { cardheight: 100 },
+
         }
     },
     mutations: {

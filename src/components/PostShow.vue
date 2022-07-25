@@ -12,7 +12,11 @@
       "
     />
     <div style="height: 20px"></div>
-    <c-editor :disabled="editorDisabled" :maybeEditorData="editorData"></c-editor>
+    <c-editor
+      :disabled="editorDisabled"
+      :isDark="isDark"
+      :maybeEditorData="editorData"
+    ></c-editor>
   </div>
   <LoadingPage v-else />
 </template>
@@ -26,7 +30,7 @@ export default {
     LoadingPage,
     CEditor,
   },
-  props: ["loading", "ready", "height", "path"],
+  props: ["loading", "ready", "height", "path", "isDark"],
   methods: {
     a() {
       this.width = window.innerWidth;

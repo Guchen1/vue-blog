@@ -5,7 +5,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css'
 import axios from 'axios'
 import router from './router'
-
+import 'element-plus/theme-chalk/dark/css-vars.css'
 //import 'default-passive-events'
 //import VConsole from 'vconsole'
 const app = createApp(App)

@@ -3,14 +3,17 @@
     v-if="loaded"
     :style="{ width: width >= 1024 ? '70%' : '90%', 'min-height': height + 'px' }"
     class="center"
+    id="fix"
   >
-    <el-page-header
-      :content="detail.title"
-      @back="
-        loaded = false;
-        $router.back();
-      "
-    />
+    <el-affix>
+      <el-page-header
+        :content="detail.title"
+        @back="
+          loaded = false;
+          $router.back();
+        "
+      />
+    </el-affix>
     <div style="height: 20px"></div>
     <c-editor
       :disabled="editorDisabled"

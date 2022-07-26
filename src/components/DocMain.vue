@@ -30,7 +30,12 @@
             'max-width': width >= 1440 ? '70%' : '800px',
           }"
         >
-          <el-header style="padding-top: 20px" :style="{ width: widthp - 15 + 'px' }">
+          <el-header
+            :style="{
+              'padding-top': width <= 600 ? '0px' : '20px',
+              width: widthp - 15 + 'px',
+            }"
+          >
             <el-row style="padding-right: 0px">
               <el-col v-if="width < 820" :span="4"
                 ><el-popover
@@ -79,12 +84,13 @@
             :style="{
               'min-height': height - 60 + 'px',
               'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
+              'padding-top': width <= 600 ? '0px' : '20px',
             }"
             style="padding-bottom: 0px !important"
             id="main"
             ref="main"
           >
-            <div class="example-pagination-block">
+            <div>
               <el-scrollbar
                 ref="scroll"
                 :max-height="height - 80 - (width < 768 ? 28 : 36) + 'px'"

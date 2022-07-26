@@ -5,6 +5,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/theme-chalk/index.css'
 import axios from 'axios'
 import router from './router'
+import VueCookies from 'vue-cookies'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 //import 'default-passive-events'
 //import VConsole from 'vconsole'
@@ -14,9 +15,8 @@ const app = createApp(App)
 //console.log(vConsole)
 
 
-app.use(router).use(ElementPlus).use(store)
-
-
-app.mount('#app')
-app.config.globalProperties.$server = "http://124.223.53.17:8081"
+app.use(router).use(ElementPlus).use(store).use(VueCookies, { expire: '7d' })
+axios.defaults.withCredentials = true
+app.config.globalProperties.$server = "http://localhost:8081"
 app.config.globalProperties.$axios = axios;
+app.mount('#app')

@@ -9,7 +9,7 @@
       :default-active="$route.path"
       style="height: 100%; min-width: 63px"
     >
-      <el-menu-item class="p" index="/" style="margin-top: 6px"
+      <el-menu-item class="p" index="/" style="margin-top: 6px" @click="$emit('changeq')"
         ><el-icon><Back /></el-icon
         ><template #title><span class="p">返回主页</span></template></el-menu-item
       >

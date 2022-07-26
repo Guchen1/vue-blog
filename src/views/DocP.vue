@@ -1,7 +1,9 @@
 <template>
   <div :style="{ 'min-height': height - 80 + 'px' }">
     <transition name="el-fade-in-linear" mode="out-in">
-      <doc-main v-if="!ready" :ready="ready" :key="1" :height="height - 80"></doc-main>
+      <keep-alive>
+        <doc-main v-if="!ready" :ready="ready" :key="1" :height="height - 80"></doc-main>
+      </keep-alive>
     </transition>
     <transition name="el-fade-in-linear" mode="out-in">
       <post-show

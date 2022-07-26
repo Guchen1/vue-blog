@@ -1,8 +1,8 @@
 <template>
   <div class="common-layout" style="height: 100%; overflow-y: hidden">
     <el-container style="height: 100%">
-      <el-header style="padding: 0" v-if="!(this.$route.path.search('/back') != -1)">
-        <div v-if="width < 450" style="height: 60px; display: flex">
+      <el-header style="padding: 0" v-if="!IsBack">
+        <div v-if="width < 500" style="height: 60px; display: flex">
           <el-button style="height: 60px; margin-left: 1em" text @click="drawer = true"
             ><div><MN style="height: 1.5em; width: 1.5em" /></div
           ></el-button>
@@ -27,8 +27,18 @@
               <el-menu-item style="font-size: 15px" index="/">主页</el-menu-item>
               <el-menu-item style="font-size: 15px" index="/doc">文章</el-menu-item>
               <el-menu-item style="font-size: 15px" index="/link">友链</el-menu-item>
-              <el-menu-item style="font-size: 15px" @click="drawer = false" index="/login"
-                >登录</el-menu-item
+              <el-menu-item
+                style="font-size: 15px"
+                @click="drawer = false"
+                :index="logged ? '/back' : '/login'"
+                >{{ logged ? "编辑" : "登录" }}</el-menu-item
+              >
+              <el-button
+                text
+                style="font-size: 10px; margin-left: 5px"
+                @click="logout"
+                v-if="logged"
+                >注销</el-button
               >
             </el-menu>
           </el-drawer>
@@ -41,9 +51,10 @@
           :ellipsis="false"
           :router="true"
           :default-active="$route.path"
+          style="align-items: center"
           :style="{
             'padding-left': '10%',
-            'padding-right': '10%',
+            'padding-right': logged ? '0' : '10%',
           }"
         >
           <div style="font-weight: bold">My Blog</div>
@@ -51,18 +62,27 @@
           <el-menu-item style="font-size: 15px" index="/">主页</el-menu-item>
           <el-menu-item style="font-size: 15px" index="/doc">文章</el-menu-item>
           <el-menu-item style="font-size: 15px" index="/link">友链</el-menu-item>
-          <el-menu-item style="font-size: 15px" index="/login">登录</el-menu-item>
+          <el-menu-item style="font-size: 15px" :index="logged ? '/back' : '/login'">{{
+            logged ? "编辑" : "登录"
+          }}</el-menu-item>
+          <el-button
+            text
+            style="font-size: 10px; margin-left: 5%; margin-right: 2em"
+            v-if="logged"
+            @click="logout"
+            >注销</el-button
+          >
         </el-menu>
       </el-header>
       <el-container>
         <el-main
-          :style="{ padding: IsMain ? '0px' : '20px' }"
+          :style="{ padding: IsMain || IsBack ? '0px' : '20px' }"
           style="padding-bottom: 0px"
         >
           <el-scrollbar
             ref="sc"
             :max-height="
-              IsMain ? (IsBack ? height + 140 + 'px' : height + 80 + 'px') : height + 'px'
+              IsMain ? height + 80 + 'px' : IsBack ? height + 140 + 'px' : height + 'px'
             "
             width="100%"
           >
@@ -71,6 +91,7 @@
                 <Transition name="el-fade-in-linear" mode="out-in">
                   <KeepAlive :key="11" exclude="PostShow">
                     <component
+                      @changeq="change()"
                       :height="height + 80"
                       :is="Component"
                       :width="width"
@@ -82,7 +103,7 @@
               </template> </RouterView
           ></el-scrollbar>
         </el-main>
-        <el-footer v-if="!IsMain"
+        <el-footer v-if="!(IsMain || IsBack)"
           ><div class="center1" style="text-align: center">
             Copyright © 2022
           </div></el-footer
@@ -96,7 +117,7 @@
             text
             circle
             type="primary"
-            @click="popvisible = !popvisible"
+            @click="popvisible = true"
             style="
               text-align: center;
               position: fixed;
@@ -110,7 +131,12 @@
         ></template>
         <div style="display: flex; justify-content: center; align-items: center">
           <span>选择主题色</span>
-          <el-color-picker v-model="color" /></div></el-popover
+          <el-color-picker
+            v-model="color"
+            :predefine="['#409eff']"
+            :show-alpha="true"
+            color-format="hex"
+          /></div></el-popover
     ></OnClickOutside>
     <UseDark v-slot="{ isDark, toggleDark }">
       <el-button
@@ -172,9 +198,22 @@ export default {
       color: "#409eff",
       popvisible: false,
       out: 0,
+      logged: false,
     };
   },
   methods: {
+    logout() {
+      this.$axios.get(this.$server + "/logout").then(() => {
+        this.logged = false;
+        this.$message.success("注销成功");
+      });
+    },
+    change() {
+      this.IsBack = 1;
+      setTimeout(() => {
+        this.IsBack = 0;
+      }, 200);
+    },
     CheckIsClosed() {
       setTimeout(() => {
         let a = document.getElementsByClassName("el-color-picker__panel")[0];
@@ -199,11 +238,14 @@ export default {
 
     checkIsMain() {
       setTimeout(() => {
-        if (this.$route.path == "/" || this.$route.path.search("/back") != -1) {
+        if (this.$route.path == "/") {
           this.IsMain = 1;
-          this.IsBack = 1;
         } else {
           this.IsMain = 0;
+        }
+        if (this.$route.path.search("/back") != -1) {
+          this.IsBack = 1;
+        } else {
           this.IsBack = 0;
         }
       }, 250);
@@ -212,14 +254,29 @@ export default {
   watch: {
     color() {
       this.cssVar = this.color;
+      this.$cookies.set("color", this.color, 60 * 60 * 24 * 30);
     },
     $route() {
       this.checkIsMain();
+      if (this.$route.path == "/back" && !this.logged) {
+        this.$axios.get(this.$server + "/login").then((res) => {
+          if (res.data.status == "success") {
+            this.logged = true;
+          } else {
+            this.logged = false;
+          }
+        });
+      }
     },
   },
   async created() {
+    if (this.$cookies.get("color") == null) {
+      this.$cookies.set("color", this.color, 60 * 60 * 24 * 30);
+    } else {
+      this.color = this.$cookies.get("color");
+    }
     this.$store.commit("push", {
-      mainimg: ["./img/1.jpg", "./img/2.jpg", "./img/3.jpg", "./img/p1.jpg"],
+      mainimg: ["/img/1.jpg", "/img/2.jpg", "/img/3.jpg", "/img/p1.jpg"],
       links: [
         {
           name: "Chen",
@@ -258,18 +315,26 @@ export default {
     document.querySelector("html").className != "dark"
       ? (this.Dark = false)
       : (this.Dark = true);
-    if (this.$route.path == "/" || this.$route.path.search("/back") != -1) {
+    if (this.$route.path == "/") {
       this.IsMain = 1;
-      this.IsBack = 1;
     } else {
       this.IsMain = 0;
+    }
+    if (this.$route.path.search("/back") != -1) {
+      this.IsBack = 1;
+    } else {
       this.IsBack = 0;
     }
-
+    this.$axios.get(this.$server + "/login").then((res) => {
+      if (res.data.status == "success") {
+        this.logged = true;
+      } else {
+        this.logged = false;
+      }
+    });
     this.getheight();
     window.addEventListener("resize", this.getheight, { passive: true });
   },
-
   unmounted() {
     window.removeEventListener("resize", this.getheight, { passive: true });
   },

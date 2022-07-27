@@ -659,6 +659,7 @@ export default {
         confirmButtonText: "继续",
         cancelButtonText: "返回",
         type: "warning",
+        customClass: "max-wd",
       })
         .then(() => {
           next();
@@ -689,4 +690,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.max-wd {
+  max-width: 80%;
+}
+</style>

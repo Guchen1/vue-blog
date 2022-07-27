@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      style="position: fixed; z-index: 10000; right: 30px"
+      style="position: fixed; z-index: 1000; right: 30px"
       :style="{ top: height / 2 + 'px' }"
     >
       <el-space size="small" direction="vertical"

@@ -195,8 +195,8 @@ export default {
     return {
       path: window.location.href,
       height: document.body.clientHeight - 140,
-      IsMain: 0,
-      IsBack: 0,
+      IsMain: false,
+      IsBack: false,
       width: 0,
       drawer: false,
       Dark: false,
@@ -256,16 +256,16 @@ export default {
     checkIsMain() {
       setTimeout(() => {
         if (this.$route.path == "/") {
-          this.IsMain = 1;
+          this.IsMain = true;
         } else {
-          this.IsMain = 0;
+          this.IsMain = false;
         }
         if (this.$route.path.search("/back") != -1) {
-          this.IsBack = 1;
+          this.IsBack = true;
         } else {
-          this.IsBack = 0;
+          this.IsBack = false;
         }
-      }, 250);
+      }, 10);
     },
   },
   watch: {
@@ -292,16 +292,7 @@ export default {
     document.querySelector("html").className != "dark"
       ? (this.Dark = false)
       : (this.Dark = true);
-    if (this.$route.path == "/") {
-      this.IsMain = 1;
-    } else {
-      this.IsMain = 0;
-    }
-    if (this.$route.path.search("/back") != -1) {
-      this.IsBack = 1;
-    } else {
-      this.IsBack = 0;
-    }
+
     this.$axios.get(this.$server + "/admin/login").then((res) => {
       if (res.data.status == "success") {
         this.logged = true;

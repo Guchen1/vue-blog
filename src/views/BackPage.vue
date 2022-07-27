@@ -95,23 +95,20 @@ export default {
     }, 10);
   },
   mounted() {
+    if (!this.logged) {
+      this.$message.error({
+        message: "请先登录",
+        duration: 1000,
+      });
+      this.$router.push("/login");
+    }
     this.$notify({
       title: "提示",
       message: "欢迎来到后台管理界面",
       type: "success",
     });
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      if (!vm.logged) {
-        vm.$message.error({
-          message: "请先登录",
-          duration: 1000,
-        });
-        vm.$router.push("/login");
-      }
-    });
-  },
+
   data() {
     return {};
   },

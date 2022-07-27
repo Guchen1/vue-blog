@@ -3,7 +3,10 @@
     :style="{ 'min-height': height - 80 + 'px' }"
     style="display: flex; justify-content: center; align-items: center"
   >
-    <el-card style="min-width: 300px">
+    <el-card
+      style="min-width: 300px"
+      :style="{ 'padding-bottom': width < 660 ? '0' : '20px' }"
+    >
       <h1 style="margin-top: 0px">登录</h1>
 
       <el-form label-width="70px" label-position="top">
@@ -81,6 +84,10 @@ export default defineComponent({
     logged: {
       type: Boolean,
       default: false,
+    },
+    width: {
+      type: Number,
+      default: 0,
     },
   },
 });

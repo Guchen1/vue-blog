@@ -79,7 +79,7 @@ export default {
 
     this.editorConfig.autosave = {
       save() {
-        a.post(b + "/words?passage=1", { content: c }).then((res) => {
+        a.post(b + "/admin/words?passage=1", { content: c }).then((res) => {
           c = res.data;
         });
       },
@@ -95,7 +95,7 @@ export default {
         language: "zh-cn",
         simpleUpload: {
           // The URL that the images are uploaded to.
-          uploadUrl: this.$server + "/image",
+          uploadUrl: this.$server + "/admin/image",
         },
         autosave: {},
         toolbar: {

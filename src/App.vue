@@ -2,7 +2,7 @@
   <div class="common-layout" style="height: 100%; overflow-y: hidden">
     <el-container style="height: 100%">
       <el-header style="padding: 0" v-if="!IsBack">
-        <div v-if="width < 500" style="height: 60px; display: flex">
+        <div v-if="width < 660" style="height: 60px; display: flex">
           <el-button style="height: 60px; margin-left: 1em" text @click="drawer = true"
             ><div><MN style="height: 1.5em; width: 1.5em" /></div
           ></el-button>
@@ -24,9 +24,15 @@
               :default-active="$route.path"
               style="border-right: 0px"
             >
-              <el-menu-item style="font-size: 15px" index="/">主页</el-menu-item>
-              <el-menu-item style="font-size: 15px" index="/doc">文章</el-menu-item>
-              <el-menu-item style="font-size: 15px" index="/link">友链</el-menu-item>
+              <el-menu-item @click="drawer = false" style="font-size: 15px" index="/"
+                >主页</el-menu-item
+              >
+              <el-menu-item @click="drawer = false" style="font-size: 15px" index="/doc"
+                >文章</el-menu-item
+              >
+              <el-menu-item @click="drawer = false" style="font-size: 15px" index="/link"
+                >友链</el-menu-item
+              >
               <el-menu-item
                 style="font-size: 15px"
                 @click="drawer = false"
@@ -54,7 +60,7 @@
           style="align-items: center"
           :style="{
             'padding-left': '10%',
-            'padding-right': logged ? '0' : '10%',
+            'padding-right': '0',
           }"
         >
           <div style="font-weight: bold">My Blog</div>
@@ -62,16 +68,15 @@
           <el-menu-item style="font-size: 15px" index="/">主页</el-menu-item>
           <el-menu-item style="font-size: 15px" index="/doc">文章</el-menu-item>
           <el-menu-item style="font-size: 15px" index="/link">友链</el-menu-item>
-          <el-menu-item style="font-size: 15px" :index="logged ? '/back' : '/login'">{{
-            logged ? "编辑" : "登录"
-          }}</el-menu-item>
-          <el-button
-            text
-            style="font-size: 10px; margin-left: 5%; margin-right: 2em"
-            v-if="logged"
-            @click="logout"
-            >注销</el-button
+          <el-menu-item
+            style="font-size: 15px"
+            @click="latency()"
+            :index="logged ? '/back' : '/login'"
+            >{{ logged ? "编辑" : "登录" }}</el-menu-item
           >
+          <div style="font-size: 10px; width: 10%">
+            <el-button text v-if="logged" @click="logout">注销</el-button>
+          </div>
         </el-menu>
       </el-header>
       <el-container>
@@ -91,6 +96,8 @@
                 <Transition name="el-fade-in-linear" mode="out-in">
                   <KeepAlive :key="11" exclude="PostShow">
                     <component
+                      @login="login()"
+                      :logged="logged"
                       @changeq="change()"
                       :height="height + 80"
                       :is="Component"
@@ -202,10 +209,20 @@ export default {
     };
   },
   methods: {
+    latency() {
+      if (this.logged) {
+        setTimeout(() => {
+          this.IsBack = true;
+        }, 190);
+      }
+    },
+    login() {
+      this.logged = true;
+    },
     logout() {
-      this.$axios.get(this.$server + "/logout").then(() => {
+      this.$axios.get(this.$server + "/admin/logout").then(() => {
         this.logged = false;
-        this.$message.success("注销成功");
+        this.$message.success({ duration: 1000, message: "注销成功" });
       });
     },
     change() {
@@ -258,15 +275,6 @@ export default {
     },
     $route() {
       this.checkIsMain();
-      if (this.$route.path == "/back" && !this.logged) {
-        this.$axios.get(this.$server + "/login").then((res) => {
-          if (res.data.status == "success") {
-            this.logged = true;
-          } else {
-            this.logged = false;
-          }
-        });
-      }
     },
   },
   async created() {
@@ -275,40 +283,9 @@ export default {
     } else {
       this.color = this.$cookies.get("color");
     }
+    this.$store.dispatch("initial", [this.$axios, this.$server]);
     this.$store.commit("push", {
       mainimg: ["/img/1.jpg", "/img/2.jpg", "/img/3.jpg", "/img/p1.jpg"],
-      links: [
-        {
-          name: "Chen",
-          details: "Chen is a web developer",
-          img: "/img/my.bmp",
-          state: 1,
-          sort: 2,
-          tmpsort: 2,
-          link: "https://www.chen.com",
-        },
-        {
-          name: "Chen3",
-          details: "Chen is a web developer",
-          img: "/img/my.bmp",
-          state: 1,
-          sort: 3,
-          tmpsort: 3,
-          link: "https://www.chen.com",
-        },
-        {
-          template: "<el-card ></el-card>",
-          js: "",
-          css: "",
-          name: "Chen",
-          variables: "",
-          parsed: null,
-          state: 2,
-          sort: 1,
-          tmpsort: 1,
-          link: "https://www.chen.com",
-        },
-      ],
     });
   },
   mounted() {
@@ -325,7 +302,7 @@ export default {
     } else {
       this.IsBack = 0;
     }
-    this.$axios.get(this.$server + "/login").then((res) => {
+    this.$axios.get(this.$server + "/admin/login").then((res) => {
       if (res.data.status == "success") {
         this.logged = true;
       } else {

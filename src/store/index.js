@@ -1,5 +1,4 @@
 import { createStore } from 'vuex'
-
 // 创建一个新的 store 实例
 const store = createStore({
     state() {
@@ -14,6 +13,11 @@ const store = createStore({
         },
         push(state, payload) {
             state['meta-info'] = Object.assign(state['meta-info'], payload)
+        },
+        tmpset(state) {
+            for (let element of state['meta-info'].links) {
+                element.tmpsort = element.sort
+            }
         }
     },
     getters: {
@@ -23,6 +27,18 @@ const store = createStore({
         getcardheight(state) {
             return state['meta-info'].cardheight;
         }
+    },
+    actions: {
+        initial(context, payload) {
+            payload[0].post(payload[1] + '/linkinitial').then(res => {
+                if (res.status == 200) {
+                    context.commit('update', ['links', res.data.links]);
+                    context.commit('update', ['cardheight', res.data.cardheight]);
+                    context.commit('tmpset');
+                }
+
+            })
+        },
 
     }
 })

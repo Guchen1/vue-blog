@@ -5,15 +5,15 @@
     class="center"
     id="fix"
   >
-    <el-affix>
-      <el-page-header
-        :content="detail.title"
-        @back="
-          loaded = false;
-          $router.back();
-        "
-      />
-    </el-affix>
+    <el-page-header
+      :content="detail.title"
+      title="返回"
+      @back="
+        loaded = false;
+        $router.back();
+      "
+    />
+
     <div style="height: 20px"></div>
     <c-editor
       :disabled="editorDisabled"
@@ -77,5 +77,10 @@ export default {
 <style>
 .center {
   margin: 0 auto;
+}
+.el-page-header__left {
+  min-width: 55px;
+  display: flex;
+  align-items: center;
 }
 </style>

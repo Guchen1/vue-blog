@@ -78,14 +78,18 @@ export default {
       type: Number,
       default: 1000,
     },
+    logged: {
+      type: Boolean,
+      default: false,
+    },
   },
   deactivated() {
     const q = document.getElementsByClassName("el-popper");
     setTimeout(() => {
       if (q.length > 0) {
-        for (let i = 0; i < q.length; i++) {
-          q[i].setAttribute("aria-hidden", "true");
-          q[i].style.display = "none";
+        for (const element of q) {
+          element.setAttribute("aria-hidden", "true");
+          element.style.display = "none";
         }
       }
     }, 10);
@@ -97,7 +101,17 @@ export default {
       type: "success",
     });
   },
-
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      if (!vm.logged) {
+        vm.$message.error({
+          message: "请先登录",
+          duration: 1000,
+        });
+        vm.$router.push("/login");
+      }
+    });
+  },
   data() {
     return {};
   },

@@ -151,7 +151,10 @@ export default {
       msg: err && err.toString && err.toString(),
       type: "自定义组件运行时错误：",
     };
-    this.$message.error("自定义组件运行时错误：" + this.subCompErr.msg);
+    this.$message.error({
+      duration: 1000,
+      message: "自定义组件运行时错误：" + this.subCompErr.msg,
+    });
   },
 };
 </script>

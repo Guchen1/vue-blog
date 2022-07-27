@@ -55,7 +55,7 @@ export default {
 
   methods: {
     go(url) {
-      window.location.href = url;
+      window.open(url);
     },
   },
 };

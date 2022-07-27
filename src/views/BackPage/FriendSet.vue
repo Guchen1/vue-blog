@@ -34,12 +34,17 @@
               :min="1"
               :max="10000"
               v-model="tmplinks[link(scope.row.sort)].tmpsort"
+              @keyup.esc="
+                tmplinks[link(scope.row.sort)].sort = links[link(scope.row.sort)].sort;
+                IsEdit = [-1, -1];
+                lock = 0;
+              "
               @keyup.enter="checkanddo(scope)"
             >
             </el-input-number></div
         ></template>
       </el-table-column>
-      <el-table-column label="名称">
+      <el-table-column label="链接">
         <template #default="scope">
           <div
             style="display: flex; align-items: center; width: 100%"
@@ -52,6 +57,11 @@
               :minlength="1"
               v-else
               v-model="tmplinks[link(scope.row.sort)].link"
+              @keyup.esc="
+                tmplinks[link(scope.row.sort)].link = links[link(scope.row.sort)].link;
+                IsEdit = [-1, -1];
+                lock = 0;
+              "
               @keyup.enter="
                 tmplinks[link(scope.row.sort)].link = unlock(
                   tmplinks[link(scope.row.sort)].link
@@ -73,6 +83,11 @@
               :minlength="1"
               v-else
               v-model="tmplinks[link(scope.row.sort)].name"
+              @keyup.esc="
+                tmplinks[link(scope.row.sort)].name = links[link(scope.row.sort)].name;
+                IsEdit = [-1, -1];
+                lock = 0;
+              "
               @keyup.enter="
                 tmplinks[link(scope.row.sort)].name = unlock(
                   tmplinks[link(scope.row.sort)].name
@@ -95,6 +110,11 @@
               :minlength="1"
               v-else
               v-model="tmplinks[link(scope.row.sort)].img"
+              @keyup.esc="
+                tmplinks[link(scope.row.sort)].img = links[link(scope.row.sort)].img;
+                IsEdit = [-1, -1];
+                lock = 0;
+              "
               @keyup.enter="
                 tmplinks[link(scope.row.sort)].img = unlock(
                   tmplinks[link(scope.row.sort)].img
@@ -117,6 +137,12 @@
               :minlength="1"
               v-else
               v-model="tmplinks[link(scope.row.sort)].details"
+              @keyup.esc="
+                tmplinks[link(scope.row.sort)].details =
+                  links[link(scope.row.sort)].details;
+                IsEdit = [-1, -1];
+                lock = 0;
+              "
               @keyup.enter="
                 tmplinks[link(scope.row.sort)].details = unlock(
                   tmplinks[link(scope.row.sort)].details
@@ -377,7 +403,7 @@ export default {
       for (let element of this.tmplinks) {
         if (element.tmpsort == this.tmplinks[this.link(scope.row.sort)].tmpsort) {
           if (element != this.tmplinks[this.link(scope.row.sort)]) {
-            this.$message.error("序号重复！");
+            this.$message.error({ duration: 1000, message: "序号重复！" });
             return;
           }
         }
@@ -402,18 +428,25 @@ export default {
           this.tmpnew.details.replace(/\s*/g, "") == "" ||
           this.tmpnew.link.replace(/\s*/g, "") == ""
         ) {
-          this.$message.error("请完整填写");
+          this.$message.error({ duration: 1000, message: "请完整填写" });
           return;
         } else {
           let maxsort = 0;
+          let maxid = 0;
           for (let element of this.tmplinks) {
             if (element.sort > maxsort) {
               maxsort = element.sort;
             }
           }
+          for (let element of this.tmplinks) {
+            if (element.id > maxid) {
+              maxid = element.id;
+            }
+          }
           this.tmpnew.sort = maxsort + 1;
+          this.tmpnew.id = maxid + 1;
           this.tmplinks.push(JSON.parse(JSON.stringify(this.tmpnew)));
-          this.$message.success("添加成功");
+          this.$message.success({ duration: 1000, message: "添加成功" });
           this.dialogFormVisible = false;
         }
       } else if (this.tmpnew.state == 2) {
@@ -425,7 +458,7 @@ export default {
           this.tmpnew.template.replace(/\s*/g, "") == "" ||
           this.tmpnew.link.replace(/\s*/g, "") == ""
         ) {
-          this.$message.error("请完整填写");
+          this.$message.error({ duration: 1000, message: "请完整填写" });
           return false;
         } else {
           if (valid(this.tmpnew.template)) {
@@ -453,11 +486,12 @@ export default {
               if (!result.error) {
                 if (type == 1) return true;
                 let maxsort = 0;
+                let maxid = 0;
                 if (this.isedit2[0]) {
                   this.tmplinks[this.link(this.isedit2[1])] = JSON.parse(
                     JSON.stringify(this.tmpnew)
                   );
-                  this.$message.success("修改成功");
+                  this.$message.success({ duration: 1000, message: "修改成功" });
                   this.dialogFormVisible = false;
                   this.isedit2 = [false, -1];
                   return;
@@ -467,27 +501,34 @@ export default {
                     maxsort = element.sort;
                   }
                 }
-                this.tmpnew.parsed = traversal(temp.childNodes[0]);
+                for (let element of this.tmplinks) {
+                  if (element.id > maxid) {
+                    maxid = element.id;
+                  }
+                }
                 this.tmpnew.sort = maxsort + 1;
-
+                this.tmpnew.id = maxid + 1;
                 this.tmplinks.push(JSON.parse(JSON.stringify(this.tmpnew)));
-                this.$message.success("添加成功");
+                this.$message.success({ duration: 1000, message: "添加成功" });
                 this.dialogFormVisible = false;
               } else {
-                this.$message.error("js错误");
+                this.$message.error({ duration: 1000, message: "js错误" });
                 return false;
               }
             } else {
-              this.$message.error("根节点不为el-card或非单根节点");
+              this.$message.error({
+                duration: 1000,
+                message: "根节点不为el-card或非单根节点",
+              });
               return false;
             }
           } else {
-            this.$message.error("语法错误");
+            this.$message.error({ duration: 1000, message: "语法错误" });
             return false;
           }
         }
       } else {
-        this.$message.error("请选择类型");
+        this.$message.error({ duration: 1000, message: "请选择类型" });
         return false;
       }
     },
@@ -516,13 +557,14 @@ export default {
     },
     cancel() {
       this.tmplinks = JSON.parse(JSON.stringify(this.links));
+      this.cardhei = this.cardheight;
     },
     save() {
       for (let element of this.tmplinks) {
         // eslint-disable-next-line
         for (let key in element) {
           if (element[key] == "INVALID") {
-            this.$message.error("请完整填写");
+            this.$message.error({ duration: 1000, message: "请完整填写" });
             return;
           }
         }
@@ -532,7 +574,21 @@ export default {
       }
       this.$store.commit("update", ["links", this.tmplinks]);
       this.$store.commit("update", ["cardheight", this.cardhei]);
-      this.$message.success("已保存");
+      this.$axios
+        .post(this.$server + "/admin/savelinks", {
+          links: this.$store.getters.getlinks,
+          cardheight: this.$store.getters.getcardheight,
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            this.$message.success({ duration: 1000, message: "已保存" });
+          } else {
+            this.$message.error({ duration: 1000, message: "保存失败" });
+          }
+        })
+        .catch(() => {
+          this.$message.error({ duration: 1000, message: "保存失败" });
+        });
     },
     getcontent() {
       let content = this.rawcontent;

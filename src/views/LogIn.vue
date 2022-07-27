@@ -36,16 +36,23 @@ export default defineComponent({
     login() {
       this.$axios
         .get(
-          this.$server + "/login?username=" + this.username + "&password=" + this.password
+          this.$server +
+            "/admin/login?username=" +
+            this.username +
+            "&password=" +
+            this.password
         )
         .then((res) => {
           if (res.data.status == "success") {
             console.log(res);
-            this.$message.success("登录成功");
-            this.$router.push("/back");
+            this.$message.success({ duration: 1000, message: "登录成功" });
+            this.$emit("login");
+            this.$router.push("/");
+            this.username = "";
+            this.password = "";
             //this.$cookies.set("mysession",res.cookies)
           } else {
-            this.$message.error("用户名或密码错误");
+            this.$message.error({ duration: 1000, message: "用户名或密码错误" });
           }
         });
     },
@@ -55,10 +62,25 @@ export default defineComponent({
     //path: "/back",
     //});
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      if (vm.logged) {
+        vm.$message.warning({
+          message: "已登录",
+          duration: 1000,
+        });
+        vm.$router.push("/");
+      }
+    });
+  },
   props: {
     height: {
       type: Number,
       default: 0,
+    },
+    logged: {
+      type: Boolean,
+      default: false,
     },
   },
 });

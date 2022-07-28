@@ -1,19 +1,22 @@
 <template>
   <div :style="{ 'min-height': height - 80 + 'px' }">
     <transition name="el-fade-in-linear" mode="out-in">
-      <keep-alive>
-        <doc-main v-if="!ready" :ready="ready" :key="1" :height="height - 80"></doc-main>
+      <keep-alive exclude="PostShow">
+        <doc-main
+          v-if="$route.name == 'doc'"
+          :ready="ready"
+          :key="1"
+          :height="height - 80"
+        ></doc-main>
+
+        <post-show
+          :isDark="isDark"
+          v-else
+          :key="2"
+          :ready="ready"
+          :height="height - 80"
+        ></post-show>
       </keep-alive>
-    </transition>
-    <transition name="el-fade-in-linear" mode="out-in">
-      <post-show
-        :isDark="isDark"
-        v-if="ready"
-        :key="2"
-        :ready="ready"
-        :height="height - 80"
-        :path="path"
-      ></post-show>
     </transition>
   </div>
 </template>
@@ -42,9 +45,7 @@ export default {
   data() {
     return {
       ready: false,
-      path: this.$route.query.PassageId,
       loading: false,
-      qlist: undefined,
     };
   },
   props: {
@@ -57,46 +58,8 @@ export default {
       default: false,
     },
   },
-  methods: {
-    async routepath() {
-      this.path = this.$route.query.PassageId;
-      if (this.$route.path == "/doc") {
-        if (this.path != undefined && this.path != "") {
-          this.ready = true;
-        } else this.ready = false;
-      }
-      if (this.qlist == undefined) {
-        await this.$axios.get(this.$server + "/passages").then((res) => {
-          this.qlist = res.data;
-          if (
-            this.qlist.find((element) => element == this.path) == undefined &&
-            this.path != "" &&
-            this.path != undefined
-          ) {
-            this.$router.push("/passagenotdound");
-          }
-        });
-      } else if (
-        this.qlist.find((element) => element == this.path) == undefined &&
-        this.path != "" &&
-        this.path != undefined
-      ) {
-        this.$router.push("/passagenotdound");
-      }
-    },
-    load() {
-      this.loading = false;
-    },
-  },
-  watch: {
-    async $route() {
-      this.loading = true;
-      await this.routepath();
-    },
-  },
-  async mounted() {
-    await this.routepath();
-  },
+  methods: {},
+  watch: {},
 };
 </script>
 

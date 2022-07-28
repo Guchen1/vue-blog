@@ -1,133 +1,136 @@
 <template>
-  <div :style="{ 'min-height': height + 'px' }">
-    <el-container>
-      <el-aside
-        v-if="width >= 820"
-        :style="{
-          'min-height': height - 60 + 'px',
-          'margin-left': width >= 2200 ? '15%' : width >= 1220 ? '6%' : '5%',
-          width: width >= 1220 ? '20%' : '30%',
-        }"
-        style="padding-top: 20px"
-        ><passage-filter
-          :v1="value1"
-          :v2="value2"
-          :cl="checkList"
-          @emit="
-            (a, b, c) => {
-              value1 = a;
-              value2 = b;
-              checkList = c;
-            }
-          "
-        ></passage-filter
-      ></el-aside>
+  <div style="position: relative; width: 100%">
+    <div :style="{ 'min-height': height + 'px' }" v-if="load">
       <el-container>
-        <el-container
-          style="max-width: 800px"
+        <el-aside
+          v-if="width >= 820"
           :style="{
             'min-height': height - 60 + 'px',
-            'max-width': width >= 1440 ? '70%' : '800px',
+            'margin-left': width >= 2200 ? '15%' : width >= 1220 ? '6%' : '5%',
+            width: width >= 1220 ? '20%' : '30%',
           }"
-        >
-          <el-header
-            :style="{
-              'padding-top': width <= 600 ? '0px' : '20px',
-              width: widthp - 15 + 'px',
-            }"
-          >
-            <el-row style="padding-right: 0px">
-              <el-col v-if="width < 820" :span="4"
-                ><el-popover
-                  v-if="width < 820"
-                  trigger="click"
-                  placement="bottom-start"
-                  width="235px"
-                >
-                  <template #reference>
-                    <el-button style="width: 100%">筛选</el-button>
-                  </template>
-                  <passage-filter
-                    :k="1"
-                    :v1="value1"
-                    :v2="value2"
-                    :cl="checkList"
-                    @emit="
-                      (a, b, c) => {
-                        value1 = a;
-                        value2 = b;
-                        checkList = c;
-                      }
-                    "
-                  ></passage-filter> </el-popover
-              ></el-col>
-              <el-col :span="width < 820 ? 14 : 18" :xs="10">
-                <el-input v-model="input" placeholder="输入以搜索"
-                  ><template #prefix>
-                    <el-icon class="el-input__icon"><search /></el-icon> </template
-                ></el-input>
-              </el-col>
-              <el-col :span="6" :xs="10">
-                <el-select
-                  v-model="sort"
-                  class="m-2"
-                  placeholder="Select"
-                  style="width: 100%"
-                >
-                  <el-option label="时间顺序" value="from" />
-                  <el-option label="时间倒序" value="to" />
-                </el-select>
-              </el-col>
-            </el-row>
-          </el-header>
-          <el-main
+          style="padding-top: 20px"
+          ><passage-filter
+            :v1="value1"
+            :v2="value2"
+            :cl="checkList"
+            @emit="
+              (a, b, c) => {
+                value1 = a;
+                value2 = b;
+                checkList = c;
+              }
+            "
+          ></passage-filter
+        ></el-aside>
+        <el-container>
+          <el-container
+            style="max-width: 800px"
             :style="{
               'min-height': height - 60 + 'px',
-              'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
-              'padding-top': width <= 600 ? '0px' : '20px',
+              'max-width': width >= 1440 ? '70%' : '800px',
             }"
-            style="padding-bottom: 0px !important"
-            id="main"
-            ref="main"
           >
-            <div>
-              <el-scrollbar
-                ref="scroll"
-                :max-height="height - 80 - (width < 768 ? 28 : 36) + 'px'"
-                style="padding-right: 20px"
-                :style="{
-                  'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
-                }"
-              >
-                <view-card
-                  class="ssss"
+            <el-header
+              :style="{
+                'padding-top': width <= 600 ? '0px' : '20px',
+                width: widthp - 15 + 'px',
+              }"
+            >
+              <el-row style="padding-right: 0px">
+                <el-col v-if="width < 820" :span="4"
+                  ><el-popover
+                    v-if="width < 820"
+                    trigger="click"
+                    placement="bottom-start"
+                    width="235px"
+                  >
+                    <template #reference>
+                      <el-button style="width: 100%">筛选</el-button>
+                    </template>
+                    <passage-filter
+                      :k="1"
+                      :v1="value1"
+                      :v2="value2"
+                      :cl="checkList"
+                      @emit="
+                        (a, b, c) => {
+                          value1 = a;
+                          value2 = b;
+                          checkList = c;
+                        }
+                      "
+                    ></passage-filter> </el-popover
+                ></el-col>
+                <el-col :span="width < 820 ? 14 : 18" :xs="10">
+                  <el-input v-model="input" placeholder="输入以搜索"
+                    ><template #prefix>
+                      <el-icon class="el-input__icon"><search /></el-icon> </template
+                  ></el-input>
+                </el-col>
+                <el-col :span="6" :xs="10">
+                  <el-select
+                    v-model="sort"
+                    class="m-2"
+                    placeholder="Select"
+                    style="width: 100%"
+                  >
+                    <el-option label="时间顺序" value="from" />
+                    <el-option label="时间倒序" value="to" />
+                  </el-select>
+                </el-col>
+              </el-row>
+            </el-header>
+            <el-main
+              :style="{
+                'min-height': height - 60 + 'px',
+                'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
+                'padding-top': width <= 600 ? '0px' : '20px',
+              }"
+              style="padding-bottom: 0px !important"
+              id="main"
+              ref="main"
+            >
+              <div>
+                <el-scrollbar
+                  ref="scroll"
+                  :max-height="height - 80 - (width < 768 ? 28 : 36) + 'px'"
+                  style="padding-right: 20px"
                   :style="{
                     'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
                   }"
-                  v-for="passage in page[current - 1]"
-                  :key="passage.id"
-                  :id="passage.id"
-                  :title="passage.title"
-                  :summary="passage.summary"
-                  :time="passage.time"
-                  :width="width"
-                  :mwidth="mwidth"
-                  :load="load"
-                ></view-card>
-              </el-scrollbar>
-              <el-pagination
-                layout="prev, pager, next"
-                :total="passages.length"
-                v-model:currentPage="current"
-                :small="width < 768"
-                :pager-count="5"
-              />
-            </div>
-          </el-main>
+                >
+                  <view-card
+                    class="ssss"
+                    :style="{
+                      'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
+                    }"
+                    v-for="passage in page[current - 1]"
+                    :key="passage.id"
+                    :id="passage.id"
+                    :title="passage.title"
+                    :summary="passage.summary"
+                    :time="passage.time"
+                    :width="width"
+                    :mwidth="mwidth"
+                    :load="load"
+                  ></view-card>
+                </el-scrollbar>
+                <el-pagination
+                  layout="prev, pager, next"
+                  :total="passages.length"
+                  v-model:currentPage="current"
+                  :small="width < 768"
+                  :pager-count="5"
+                />
+              </div>
+            </el-main>
+          </el-container>
+          <el-aside v-if="width >= 1366" style="padding-top: 20px">Aside</el-aside>
         </el-container>
-        <el-aside v-if="width >= 1366" style="padding-top: 20px">Aside</el-aside>
       </el-container>
-    </el-container>
+    </div>
+    <LoadingPage v-else />
   </div>
 </template>
 
@@ -136,6 +139,7 @@ import { defineAsyncComponent } from "vue";
 const ViewCard = defineAsyncComponent(() => import("./ViewCard.vue"));
 import { Search } from "@element-plus/icons-vue";
 //import { ref } from "vue";
+import LoadingPage from "./LoadingPage.vue";
 const PassageFilter = defineAsyncComponent(() => import("./PassageFilter.vue"));
 
 var map = new Map();
@@ -144,6 +148,7 @@ export default {
     Search,
     ViewCard,
     PassageFilter,
+    LoadingPage,
   },
   data() {
     return {

@@ -9,7 +9,7 @@
       :default-active="$route.path"
       style="height: 100%; min-width: 63px"
     >
-      <el-menu-item class="p" index="/" style="margin-top: 6px" @click="$emit('changeq')"
+      <el-menu-item class="p" index="/" style="margin-top: 6px"
         ><el-icon><Back /></el-icon
         ><template #title><span class="p">返回主页</span></template></el-menu-item
       >
@@ -40,6 +40,7 @@
           <template v-if="Component">
             <Transition name="el-fade-in-linear" mode="out-in">
               <component
+                @changeq="$emit('changeq')"
                 :height="height"
                 :key="$route.name"
                 :is="Component"
@@ -94,6 +95,9 @@ export default {
       }
     }, 10);
   },
+  activated() {
+    this.$emit("back");
+  },
   mounted() {
     if (!this.logged) {
       this.$message.error({
@@ -108,7 +112,10 @@ export default {
       type: "success",
     });
   },
-
+  beforeRouteLeave(to, from, next) {
+    this.$emit("changeq");
+    next();
+  },
   data() {
     return {};
   },

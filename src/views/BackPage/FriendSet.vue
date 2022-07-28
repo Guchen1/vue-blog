@@ -655,6 +655,15 @@ export default {
       //就是上面的状态 如果是true , 则不询问是否保存, 当然这个方法比较笨, 大家可以使用更优雅的方式
       next();
     } else {
+      const q = document.getElementsByClassName("el-popper");
+      setTimeout(() => {
+        if (q.length > 0) {
+          for (const element of q) {
+            element.setAttribute("aria-hidden", "true");
+            element.style.display = "none";
+          }
+        }
+      }, 10);
       this.$confirm("未保存的更改将取消", "提示", {
         confirmButtonText: "继续",
         cancelButtonText: "返回",
@@ -693,5 +702,9 @@ export default {
 <style>
 .max-wd {
   max-width: 80%;
+  z-index: 100000;
+}
+body {
+  padding: 0px !important;
 }
 </style>

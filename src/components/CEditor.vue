@@ -35,30 +35,19 @@ export default {
   },
   watch: {
     isDark() {
-      if (this.isDark) {
-        document.getElementsByClassName("ck-editor__editable")[0].style.background =
-          "#141414";
-      } else {
-        document.getElementsByClassName("ck-editor__editable")[0].style.background =
-          "#ffffff";
-      }
+      this.colorb = this.isDark ? "#141414" : "#ffffff";
     },
   },
 
   async mounted() {
     if (this.disabled) {
       this.editorData = this.maybeEditorData;
-      setTimeout(() => {
-        if (this.isDark) {
-          document.getElementsByClassName("ck-editor__editable")[0].style.background =
-            "#141414";
-        } else {
-          document.getElementsByClassName("ck-editor__editable")[0].style.background =
-            "#ffffff";
+      let q = setInterval(() => {
+        if (document.getElementsByClassName("ck-editor__top").length > 0) {
+          clearInterval(q);
+          document.getElementsByClassName("ck-editor__top")[0].hidden = true;
         }
-        document.getElementsByClassName("ck-editor__top")[0].style.display = "none";
-      }, 90);
-
+      }, 10);
       return;
     }
 
@@ -67,9 +56,9 @@ export default {
     });
   },
   created() {
+    this.colorb = this.isDark ? "#141414" : "#ffffff";
     if (this.disabled) {
       this.editorConfig.toolbar.items = [];
-
       return;
     }
     const a = this.$axios;
@@ -85,10 +74,12 @@ export default {
       },
     };
   },
+  methods: {},
 
   data() {
     return {
       q: 0,
+      colorb: "",
       editor: DecoupledEditor,
       editorData: "<p>Content of the editor.</p>",
       editorConfig: {
@@ -112,5 +103,9 @@ export default {
 }
 .ck-read-only {
   border: 0px !important;
+}
+
+.ck-editor__editable {
+  background: v-bind(colorb) !important;
 }
 </style>

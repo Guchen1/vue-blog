@@ -2,120 +2,119 @@
   <div class="common-layout" style="height: 100%; overflow-y: hidden">
     <el-container style="height: 100%">
       <el-header style="padding: 0" v-if="!IsBack">
-        <div v-if="width < 660" style="height: 60px; display: flex">
-          <el-button style="height: 60px; margin-left: 1em" text @click="drawer = true"
-            ><div><MN style="height: 1.5em; width: 1.5em" /></div
-          ></el-button>
-          <div
-            style="
-              font-weight: bold;
-              display: inline-flex;
-              align-items: center;
-              padding-left: 1.5em;
-              line-height: 60px;
-            "
-          >
-            Chen's blog
-          </div>
-          <el-drawer v-model="drawer" :with-header="false" direction="ltr" size="60%">
-            <el-menu
-              :ellipsis="false"
-              :router="true"
-              :default-active="$route.path"
-              style="border-right: 0px"
+        <Transition name="el-fade-in-linear" mode="out-in">
+          <div v-if="width < 660" style="height: 60px; display: flex">
+            <el-button style="height: 60px; margin-left: 1em" text @click="drawer = true"
+              ><div><MN style="height: 1.5em; width: 1.5em" /></div
+            ></el-button>
+            <div
+              style="
+                font-weight: bold;
+                display: inline-flex;
+                align-items: center;
+                padding-left: 1.5em;
+                line-height: 60px;
+              "
             >
-              <el-menu-item @click="drawer = false" style="font-size: 15px" index="/"
-                >主页</el-menu-item
+              Chen's blog
+            </div>
+            <el-drawer v-model="drawer" :with-header="false" direction="ltr" size="60%">
+              <el-menu
+                :ellipsis="false"
+                :router="true"
+                :default-active="$route.path"
+                style="border-right: 0px"
               >
-              <el-menu-item @click="drawer = false" style="font-size: 15px" index="/doc"
-                >文章</el-menu-item
-              >
-              <el-menu-item @click="drawer = false" style="font-size: 15px" index="/link"
-                >友链</el-menu-item
-              >
-              <el-menu-item
-                style="font-size: 15px"
-                @click="drawer = false"
-                :index="logged ? '/back' : '/login'"
-                >{{ logged ? "编辑" : "登录" }}</el-menu-item
-              >
-              <el-button
-                text
-                style="font-size: 10px; margin-left: 5px"
-                @click="logout"
-                v-if="logged"
-                >注销</el-button
-              >
-            </el-menu>
-          </el-drawer>
-        </div>
-
-        <el-menu
-          v-else
-          class="center1"
-          mode="horizontal"
-          :ellipsis="false"
-          :router="true"
-          :default-active="$route.path"
-          style="align-items: center"
-          :style="{
-            'padding-left': '10%',
-            'padding-right': '0',
-          }"
-        >
-          <div style="font-weight: bold">My Blog</div>
-          <div style="flex-grow: 1"></div>
-          <el-menu-item style="font-size: 15px" index="/">主页</el-menu-item>
-          <el-menu-item style="font-size: 15px" index="/doc">文章</el-menu-item>
-          <el-menu-item style="font-size: 15px" index="/link">友链</el-menu-item>
-          <el-menu-item
-            style="font-size: 15px"
-            @click="latency()"
-            :index="logged ? '/back' : '/login'"
-            >{{ logged ? "编辑" : "登录" }}</el-menu-item
-          >
-          <div style="font-size: 10px; width: 10%">
-            <el-button text v-if="logged" @click="logout">注销</el-button>
+                <el-menu-item @click="drawer = false" style="font-size: 15px" index="/"
+                  >主页</el-menu-item
+                >
+                <el-menu-item @click="drawer = false" style="font-size: 15px" index="/doc"
+                  >文章</el-menu-item
+                >
+                <el-menu-item
+                  @click="drawer = false"
+                  style="font-size: 15px"
+                  index="/link"
+                  >友链</el-menu-item
+                >
+                <el-menu-item
+                  style="font-size: 15px"
+                  @click="drawer = false"
+                  :index="logged ? '/back' : '/login'"
+                  >{{ logged ? "编辑" : "登录" }}</el-menu-item
+                >
+                <el-button
+                  text
+                  style="font-size: 10px; margin-left: 5px"
+                  @click="logout"
+                  v-if="logged"
+                  >注销</el-button
+                >
+              </el-menu>
+            </el-drawer>
           </div>
-        </el-menu>
-      </el-header>
-      <el-container>
-        <el-main
-          :style="{ padding: IsMain || IsBack ? '0px' : '20px' }"
-          style="padding-bottom: 0px"
-        >
-          <el-scrollbar
-            ref="sc"
-            :max-height="
-              IsMain ? height + 80 + 'px' : IsBack ? height + 140 + 'px' : height + 'px'
-            "
-            width="100%"
+
+          <el-menu
+            v-else
+            class="center1"
+            mode="horizontal"
+            :ellipsis="false"
+            :router="true"
+            :default-active="$route.path"
+            style="align-items: center"
+            :style="{
+              'padding-left': '10%',
+              'padding-right': '0',
+            }"
           >
-            <RouterView v-slot="{ Component }">
-              <template v-if="Component">
-                <Transition name="el-fade-in-linear" mode="out-in">
-                  <KeepAlive :key="11" exclude="PostShow">
-                    <component
-                      @login="login()"
-                      :logged="logged"
-                      @changeq="change()"
-                      :height="height + 80"
-                      :is="Component"
-                      :width="width"
-                      :isDark="Dark"
-                      :key="$route.path.search('/back') != -1 ? '/back' : $route.path"
-                    ></component>
-                  </KeepAlive>
-                </Transition>
-              </template> </RouterView
-          ></el-scrollbar>
-        </el-main>
-        <el-footer v-if="!(IsMain || IsBack)"
-          ><div class="center1" style="text-align: center">
-            Copyright © 2022
-          </div></el-footer
+            <div style="font-weight: bold">My Blog</div>
+            <div style="flex-grow: 1"></div>
+            <el-menu-item style="font-size: 15px" index="/">主页</el-menu-item>
+            <el-menu-item style="font-size: 15px" index="/doc">文章</el-menu-item>
+            <el-menu-item style="font-size: 15px" index="/link">友链</el-menu-item>
+            <el-menu-item style="font-size: 15px" :index="logged ? '/back' : '/login'">{{
+              logged ? "编辑" : "登录"
+            }}</el-menu-item>
+            <div style="font-size: 10px; width: 10%">
+              <el-button text v-if="logged" @click="logout">注销</el-button>
+            </div>
+          </el-menu>
+        </Transition>
+      </el-header>
+      <el-main
+        :style="{ padding: IsMain || IsBack ? '0px' : '20px' }"
+        style="padding-bottom: 0px"
+      >
+        <el-scrollbar
+          ref="sc"
+          :max-height="
+            IsMain ? height + 80 + 'px' : IsBack ? height + 140 + 'px' : height + 'px'
+          "
+          width="100%"
         >
-      </el-container>
+          <RouterView v-slot="{ Component }">
+            <template v-if="Component">
+              <Transition name="el-fade-in-linear" mode="out-in">
+                <KeepAlive :key="11" exclude="PostShow">
+                  <component
+                    @login="login()"
+                    :logged="logged"
+                    @back="IsBack = true"
+                    @changeq="change()"
+                    :height="height + 80"
+                    :is="Component"
+                    :width="width"
+                    :isDark="Dark"
+                    :key="$route.path.search('/back') != -1 ? '/back' : $route.path"
+                  ></component>
+                </KeepAlive>
+              </Transition>
+            </template> </RouterView
+        ></el-scrollbar>
+      </el-main>
+      <el-footer v-if="!(IsMain || IsBack)"
+        ><div class="center1" style="text-align: center">Copyright © 2022</div></el-footer
+      >
     </el-container>
     <OnClickOutside @trigger="CheckIsClosed()">
       <el-popover placement="top" :width="150" v-model:visible="popvisible">
@@ -209,13 +208,6 @@ export default {
     };
   },
   methods: {
-    latency() {
-      if (this.logged) {
-        setTimeout(() => {
-          this.IsBack = true;
-        }, 190);
-      }
-    },
     login() {
       this.logged = true;
     },
@@ -226,10 +218,9 @@ export default {
       });
     },
     change() {
-      this.IsBack = 1;
       setTimeout(() => {
-        this.IsBack = 0;
-      }, 200);
+        this.IsBack = false;
+      }, 250);
     },
     CheckIsClosed() {
       setTimeout(() => {
@@ -260,12 +251,7 @@ export default {
         } else {
           this.IsMain = false;
         }
-        if (this.$route.path.search("/back") != -1) {
-          this.IsBack = true;
-        } else {
-          this.IsBack = false;
-        }
-      }, 10);
+      }, 1);
     },
   },
   watch: {
@@ -274,7 +260,9 @@ export default {
       this.$cookies.set("color", this.color, 60 * 60 * 24 * 30);
     },
     $route() {
-      this.checkIsMain();
+      setTimeout(() => {
+        this.checkIsMain();
+      }, 250);
     },
   },
   async created() {
@@ -289,6 +277,7 @@ export default {
     });
   },
   mounted() {
+    this.checkIsMain();
     document.querySelector("html").className != "dark"
       ? (this.Dark = false)
       : (this.Dark = true);

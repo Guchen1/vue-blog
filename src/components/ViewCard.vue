@@ -1,9 +1,6 @@
 <template>
   <div>
-    <router-link
-      :to="{ name: 'doc', query: { PassageId: id } }"
-      style="text-decoration: none"
-    >
+    <router-link :to="'/doc/' + id" style="text-decoration: none">
       <el-card shadow="hover" class="box-card" style="margin-bottom: 10px">
         <el-skeleton style="width: 100%" animated :loading="!loaded">
           <template #template>

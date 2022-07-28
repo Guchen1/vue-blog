@@ -23,6 +23,12 @@ const routes = [{
         name: "doc",
         component: () =>
             import ("../views/DocP.vue"),
+
+    }, {
+        path: "/doc/:id",
+        name: "doc-detail",
+        component: () =>
+            import ("../views/DocP.vue"),
     },
     {
         path: "/back",

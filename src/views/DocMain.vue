@@ -33,7 +33,7 @@
           >
             <el-header
               :style="{
-                'padding-top': width <= 600 ? '0px' : '20px',
+                'padding-top': width <= 660 ? '0px' : '20px',
                 width: widthp - 15 + 'px',
               }"
             >
@@ -94,7 +94,7 @@
               <div>
                 <el-scrollbar
                   ref="scroll"
-                  :max-height="height - 160 - (width < 768 ? 28 : 36) + 'px'"
+                  :max-height="height - 160 - (width < 600 ? 8 : 36) + 'px'"
                   style="padding-right: 20px"
                   :style="{
                     'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
@@ -120,7 +120,7 @@
                   layout="prev, pager, next"
                   :total="passages.length"
                   v-model:currentPage="current"
-                  :small="width < 768"
+                  :small="width < 660"
                   :pager-count="5"
                 />
               </div>
@@ -156,7 +156,6 @@ export default {
       margin: 0,
       mainwidth: window.innerWidth > 800 ? 800 : window.innerWidth,
       widthp: 0,
-      width: window.innerWidth,
       input: "",
       sort: "时间倒序",
       passages: "",
@@ -170,11 +169,8 @@ export default {
       mwidth: 0,
     };
   },
-  props: ["height"],
+  props: ["height", "width"],
   methods: {
-    detect() {
-      this.widthtemp = window.innerWidth;
-    },
     loadfull() {
       if (this.current == 0) return;
       this.currentold = this.current;
@@ -270,12 +266,9 @@ export default {
       }
       this.load = true;
     }, 300);
-
-    window.addEventListener("resize", this.detect, { passive: true });
   },
   watch: {
-    widthtemp() {
-      this.width = window.innerWidth;
+    width() {
       setTimeout(() => {
         if (document.getElementById("main") != null)
           this.widthp = document.getElementById("main").offsetWidth - 5;
@@ -344,9 +337,6 @@ export default {
         });
       }
     },
-  },
-  deactivated() {
-    window.removeEventListener("resize", this.detect);
   },
 };
 </script>

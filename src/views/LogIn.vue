@@ -5,7 +5,7 @@
   >
     <el-card
       style="min-width: 300px"
-      :style="{ 'padding-bottom': width < 660 ? '0' : '20px' }"
+      :style="{ 'padding-bottom': width < 660 ? '0px' : '0px' }"
     >
       <h1 style="margin-top: 0px">登录</h1>
 
@@ -94,8 +94,11 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
 .el-main {
+  padding-bottom: 0px;
+}
+.el-card__body {
   padding-bottom: 0px;
 }
 </style>

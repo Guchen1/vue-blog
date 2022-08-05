@@ -243,11 +243,8 @@ export default {
       }, 100);
     },
     getheight() {
-      setTimeout(() => {
-        this.height = document.body.clientHeight - 140;
-        this.width = document.body.clientWidth;
-      }, 10);
-
+      this.height = window.innerHeight - 140;
+      this.width = window.innerWidth;
       setTimeout(() => {
         clearInterval(a);
       }, 400);
@@ -263,6 +260,7 @@ export default {
     },
   },
   async created() {
+    this.width = window.innerWidth;
     if (this.$cookies.get("color") == null) {
       this.$cookies.set("color", this.color, 60 * 60 * 24 * 30);
     } else {

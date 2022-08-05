@@ -19,7 +19,7 @@
         :maybeEditorData="editorData"
       ></c-editor>
     </div>
-    <LoadingPage v-else />
+    <LoadingPage :style="{ 'min-height': height - 80 + 'px' }" v-else />
   </div>
 </template>
 

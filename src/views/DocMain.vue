@@ -130,7 +130,7 @@
         </el-container>
       </el-container>
     </div>
-    <LoadingPage v-else />
+    <LoadingPage :style="{ 'min-height': height - 80 + 'px' }" v-else />
   </div>
 </template>
 

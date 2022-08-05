@@ -3,7 +3,12 @@
     class="root"
     id="text404"
     :style="{ height: height + 'px', width: width + 'px' }"
-    style="text-align: center; display: table-cell; vertical-align: middle"
+    style="
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    "
   >
     Loading...
     <br /><br />

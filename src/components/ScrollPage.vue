@@ -31,8 +31,13 @@
         }"
       ></div>
 
-      <div style="height: 60px; text-align: center; line-height: 60px">
+      <div style="text-align: center; line-height: 60px">
         Copyright © 2022
+        <a
+          href="https://beian.miit.gov.cn/"
+          style="text-decoration: none; color: black; font-size: 12px"
+          >苏ICP备2022031828号-1</a
+        >
       </div>
     </el-scrollbar>
   </div>

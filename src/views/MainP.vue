@@ -5,14 +5,19 @@
 <script>
 import ScrollPage from "../components/ScrollPage.vue";
 export default {
-  created() {},
+  created() {
+    this.img = this.$store.state["meta-info"].mainimg;
+  },
   components: {
     ScrollPage,
   },
   data() {
     return {
-      img: ["/img/1.jpg", "/img/2.jpg", "/img/3.jpg", "/img/p1.jpg"],
+      img: [],
     };
+  },
+  activated() {
+    this.$emit("main");
   },
   props: {
     height: {

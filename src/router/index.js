@@ -22,15 +22,20 @@ const routes = [{
         path: "/doc",
         name: "doc",
         component: () =>
-            import ("../views/DocP.vue"),
+            import ("../views/DocMain.vue"),
 
     }, {
         path: "/doc/:id",
         name: "doc-detail",
         component: () =>
-            import ("../views/DocP.vue"),
+            import ("../views/PostShow.vue"),
     },
     {
+        path: "/load",
+        name: "load",
+        component: () =>
+            import ("../components/LoadingPage.vue")
+    }, {
         path: "/back",
         name: "back",
         component: () =>

@@ -82,7 +82,10 @@
         </Transition>
       </el-header>
       <el-main
-        :style="{ padding: IsMain || IsBack ? '0px' : '20px' }"
+        :style="{
+          padding: IsMain || IsBack ? '0px' : '20px',
+          'padding-top': IsMain || IsBack ? '0px' : width <= 600 ? '10px' : '20px',
+        }"
         style="padding-bottom: 0px"
       >
         <el-scrollbar
@@ -97,6 +100,7 @@
               <Transition name="el-fade-in-linear" mode="out-in">
                 <KeepAlive :key="11" exclude="PostShow">
                   <component
+                    @main="IsMain = true"
                     @login="login()"
                     :logged="logged"
                     @back="IsBack = true"
@@ -105,6 +109,7 @@
                     :is="Component"
                     :width="width"
                     :isDark="Dark"
+                    @nomain="IsMain = false"
                     :key="$route.path.search('/back') != -1 ? '/back' : $route.path"
                   ></component>
                 </KeepAlive>
@@ -113,8 +118,15 @@
         ></el-scrollbar>
       </el-main>
       <el-footer v-if="!(IsMain || IsBack)"
-        ><div class="center1" style="text-align: center">Copyright © 2022</div></el-footer
-      >
+        ><div class="center1" style="text-align: center; line-height: 60px">
+          Copyright © 2022
+          <a
+            href="https://beian.miit.gov.cn/"
+            style="text-decoration: none; color: black; font-size: 12px"
+            >苏ICP备2022031828号-1</a
+          >
+        </div>
+      </el-footer>
     </el-container>
     <OnClickOutside @trigger="CheckIsClosed()">
       <el-popover placement="top" :width="150" v-model:visible="popvisible">
@@ -129,7 +141,7 @@
               position: fixed;
               bottom: 70px;
               z-index: 100000;
-              right: 30px;
+              right: 20px;
               width: 45px;
               height: 45px;
             "
@@ -158,7 +170,7 @@
           position: fixed;
           bottom: 20px;
           z-index: 100000;
-          right: 30px;
+          right: 20px;
           width: 45px;
           height: 45px;
         "
@@ -243,26 +255,11 @@ export default {
         this.$refs.sc.update();
       }, 100);
     },
-
-    checkIsMain() {
-      setTimeout(() => {
-        if (this.$route.path == "/") {
-          this.IsMain = true;
-        } else {
-          this.IsMain = false;
-        }
-      }, 1);
-    },
   },
   watch: {
     color() {
       this.cssVar = this.color;
       this.$cookies.set("color", this.color, 60 * 60 * 24 * 30);
-    },
-    $route() {
-      setTimeout(() => {
-        this.checkIsMain();
-      }, 250);
     },
   },
   async created() {
@@ -273,11 +270,10 @@ export default {
     }
     this.$store.dispatch("initial", [this.$axios, this.$server]);
     this.$store.commit("push", {
-      mainimg: ["/img/1.jpg", "/img/2.jpg", "/img/3.jpg", "/img/p1.jpg"],
+      mainimg: ["/img/1.webp", "/img/2.webp", "/img/3.webp", "/img/p1.webp"],
     });
   },
   mounted() {
-    this.checkIsMain();
     document.querySelector("html").className != "dark"
       ? (this.Dark = false)
       : (this.Dark = true);

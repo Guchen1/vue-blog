@@ -47,7 +47,7 @@ export default {
           clearInterval(q);
           document.getElementsByClassName("ck-editor__top")[0].hidden = true;
         }
-      }, 10);
+      }, 1);
       return;
     }
 

@@ -34,11 +34,12 @@ export default {
       this.width = document.body.clientWidth - 40;
     },
   },
-  mounted() {
+  activated() {
+    this.$emit("nomain");
     window.addEventListener("resize", this.getwidth, { passive: true });
   },
 
-  unmounted() {
+  deactivated() {
     window.removeEventListener("resize", this.getwidth);
     clearTimeout(this.time);
   },

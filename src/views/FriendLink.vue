@@ -1,6 +1,5 @@
 <template>
   <div class="rq" :style="{ 'min-height': height - 80 + 'px' }">
-    <div style="height: 30px"></div>
     <el-row
       :style="{
         'padding-left': width > 700 ? '15%' : '5%',

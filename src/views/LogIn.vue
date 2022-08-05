@@ -61,6 +61,7 @@ export default defineComponent({
     },
   },
   activated() {
+    this.$emit("nomain");
     //this.$router.push({
     //path: "/back",
     //});

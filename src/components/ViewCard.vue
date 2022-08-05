@@ -66,7 +66,7 @@ export default {
   },
   methods: {},
   created() {
-    this.img.src = "/img/p1.jpg";
+    this.img.src = "/img/p1.webp";
     this.img.onload = () => {
       this.loaded = true;
     };

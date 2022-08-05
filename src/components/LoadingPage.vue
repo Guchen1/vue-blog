@@ -26,13 +26,13 @@ export default {
       this.width = document.body.clientWidth - 40;
     },
   },
-  mounted() {
+  activated() {
     this.getheight();
     window.addEventListener("resize", this.getheight, { passive: true });
     window.addEventListener("resize", this.getwidth, { passive: true });
   },
 
-  unmounted() {
+  deactivated() {
     window.removeEventListener("resize", this.getheight);
     window.removeEventListener("resize", this.getwidth);
   },

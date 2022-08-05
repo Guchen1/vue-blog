@@ -1,11 +1,11 @@
 <template>
   <div style="position: relative; width: 100%">
-    <div :style="{ 'min-height': height + 'px' }" v-if="load">
+    <div :style="{ 'min-height': height - 80 + 'px' }" v-if="load">
       <el-container>
         <el-aside
           v-if="width >= 820"
           :style="{
-            'min-height': height - 60 + 'px',
+            'min-height': height - 140 + 'px',
             'margin-left': width >= 2200 ? '15%' : width >= 1220 ? '6%' : '5%',
             width: width >= 1220 ? '20%' : '30%',
           }"
@@ -27,7 +27,7 @@
           <el-container
             style="max-width: 800px"
             :style="{
-              'min-height': height - 60 + 'px',
+              'min-height': height - 140 + 'px',
               'max-width': width >= 1440 ? '70%' : '800px',
             }"
           >
@@ -83,7 +83,7 @@
             </el-header>
             <el-main
               :style="{
-                'min-height': height - 60 + 'px',
+                'min-height': height - 140 + 'px',
                 'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
                 'padding-top': width <= 600 ? '0px' : '20px',
               }"
@@ -94,7 +94,7 @@
               <div>
                 <el-scrollbar
                   ref="scroll"
-                  :max-height="height - 80 - (width < 768 ? 28 : 36) + 'px'"
+                  :max-height="height - 160 - (width < 768 ? 28 : 36) + 'px'"
                   style="padding-right: 20px"
                   :style="{
                     'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
@@ -135,13 +135,12 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from "vue";
-const ViewCard = defineAsyncComponent(() => import("./ViewCard.vue"));
+import ViewCard from "@/components/ViewCard.vue";
 import { Search } from "@element-plus/icons-vue";
 //import { ref } from "vue";
-import LoadingPage from "./LoadingPage.vue";
-const PassageFilter = defineAsyncComponent(() => import("./PassageFilter.vue"));
+import LoadingPage from "@/components/LoadingPage.vue";
 
+import PassageFilter from "@/components/PassageFilter.vue";
 var map = new Map();
 export default {
   components: {
@@ -171,7 +170,7 @@ export default {
       mwidth: 0,
     };
   },
-  props: ["ready", "height"],
+  props: ["height"],
   methods: {
     detect() {
       this.widthtemp = window.innerWidth;
@@ -192,7 +191,7 @@ export default {
         if (this.page[this.current - 1] == undefined) return;
         if (this.page[this.current - 1].length == 0) return;
         if (!this.pageset.has(this.input)) this.pageset.set(this.input, new Map());
-        this.load = false;
+
         this.$axios
           .post(this.$server + "/card", {
             id: this.page[this.current - 1],
@@ -205,7 +204,7 @@ export default {
               return;
             }
             this.page[this.current - 1] = response.data;
-            this.load = true;
+
             this.pageset.set(
               this.input,
               this.pageset
@@ -260,7 +259,8 @@ export default {
       await this.getpassage(this.$server + "/passages");
     }
   },
-  mounted() {
+  activated() {
+    this.$emit("nomain");
     setTimeout(() => {
       if (document.getElementById("main") != null) {
         this.widthp = document.getElementById("main").offsetWidth - 5;
@@ -268,6 +268,7 @@ export default {
       if (document.getElementsByClassName("ssss")[0] != null) {
         this.mwidth = document.getElementsByClassName("ssss")[0].offsetWidth;
       }
+      this.load = true;
     }, 300);
 
     window.addEventListener("resize", this.detect, { passive: true });
@@ -344,7 +345,7 @@ export default {
       }
     },
   },
-  beforeUnmount() {
+  deactivated() {
     window.removeEventListener("resize", this.detect);
   },
 };

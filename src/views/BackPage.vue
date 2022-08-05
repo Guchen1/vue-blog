@@ -96,9 +96,7 @@ export default {
     }, 10);
   },
   activated() {
-    this.$emit("back");
-  },
-  mounted() {
+    this.$emit("nomain");
     if (!this.logged) {
       this.$message.error({
         message: "请先登录",
@@ -111,8 +109,9 @@ export default {
       message: "欢迎来到后台管理界面",
       type: "success",
     });
+    this.$emit("back");
   },
-  beforeRouteLeave(to, from, next) {
+  beforeRouteLeave(_to, _from, next) {
     this.$emit("changeq");
     next();
   },

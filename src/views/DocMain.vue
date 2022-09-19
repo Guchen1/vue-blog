@@ -99,24 +99,26 @@
                   :style="{
                     'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
                   }"
-                >
-                  <view-card
-                    class="ssss"
-                    :style="{
-                      'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
-                    }"
-                    v-for="passage in page[current - 1]"
-                    :key="passage.id"
-                    :id="passage.id"
-                    :title="passage.title"
-                    :summary="passage.summary"
-                    :time="passage.time"
-                    :width="width"
-                    :mwidth="mwidth"
-                    :load="load"
-                  ></view-card>
+                  ><transition-group name="list" mode="out-in">
+                    <view-card
+                      class="ssss"
+                      :style="{
+                        'max-width': width >= 1440 ? '100%' : mainwidth + 'px',
+                      }"
+                      v-for="passage in page[current - 1]"
+                      :key="passage.id"
+                      :id="passage.id"
+                      :title="passage.title"
+                      :summary="passage.summary"
+                      :time="passage.time"
+                      :width="width"
+                      :mwidth="mwidth"
+                      :load="load"
+                    ></view-card>
+                  </transition-group>
                 </el-scrollbar>
                 <el-pagination
+                  style="position: absolute; bottom: 0px"
                   layout="prev, pager, next"
                   :total="passages.length"
                   v-model:currentPage="current"
@@ -151,6 +153,7 @@ export default {
   },
   data() {
     return {
+      nowscroll: 0,
       currentold: 1000,
       current: 1,
       margin: 0,
@@ -256,6 +259,15 @@ export default {
     }
   },
   activated() {
+    let a = () => {
+      if (this.$refs.scroll == undefined) {
+        setTimeout(a, 20);
+        return;
+      }
+      console.log(this.$refs.scroll);
+      this.$refs.scroll.setScrollTop(this.nowscroll);
+    };
+    setTimeout(a, 100);
     this.$emit("nomain");
     setTimeout(() => {
       if (document.getElementById("main") != null) {
@@ -266,6 +278,18 @@ export default {
       }
       this.load = true;
     }, 300);
+  },
+  beforeRouteLeave(to, from, next) {
+    if (to.name == "doc-detail") {
+      next();
+      this.nowscroll = this.$refs.scroll.wrap$.scrollTop;
+    } else {
+      this.nowscroll = 0;
+      next();
+    }
+  },
+  deactivated() {
+    this.$refs.scroll.wrap$.scrollTop = this.nowscroll;
   },
   watch: {
     width() {
@@ -348,4 +372,18 @@ input {
 .el-main {
   padding-bottom: 0px;
 }
+.list-move, /* 对移动中的元素应用的过渡 */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.25s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* 确保将离开的元素从布局流中删除
+  以便能够正确地计算移动的动画。 */
 </style>

@@ -18,7 +18,7 @@ const app = createApp(App)
 app.use(router).use(ElementPlus).use(store).use(VueCookies, { expire: '7d' })
 axios.defaults.withCredentials = true
 if (process.env.NODE_ENV == 'development') {
-    app.config.globalProperties.$server = "http://192.168.31.87:8081"
+    app.config.globalProperties.$server = "http://localhost:8081"
 } else {
     app.config.globalProperties.$server = "http://124.223.53.17:8081"
 }

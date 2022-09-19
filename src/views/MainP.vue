@@ -1,5 +1,5 @@
 <template>
-  <scroll-page :height="height" :img="img"></scroll-page>
+  <scroll-page :height="height" :Dark="isDark" :img="img"></scroll-page>
 </template>
 
 <script>
@@ -23,6 +23,10 @@ export default {
     height: {
       type: Number,
       default: 0,
+    },
+    isDark: {
+      type: Boolean,
+      default: false,
     },
   },
 };

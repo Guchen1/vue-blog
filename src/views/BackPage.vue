@@ -8,6 +8,7 @@
       :router="true"
       :default-active="$route.path"
       style="height: 100%; min-width: 63px"
+      :style="{ width: width >= 678 ? '170px' : 'auto' }"
     >
       <el-menu-item class="p" index="/" style="margin-top: 6px"
         ><el-icon><Back /></el-icon
@@ -21,18 +22,31 @@
         ><el-icon><Folder /></el-icon
         ><template #title><span class="p">主页设置</span></template></el-menu-item
       >
-      <el-menu-item class="p" index="/back/passageset"
-        ><el-icon><EditPen /></el-icon
-        ><template #title><span class="p">文章管理</span></template></el-menu-item
+      <el-sub-menu index="/back/passageset">
+        <template #title>
+          <el-icon><EditPen></EditPen></el-icon><span class="p">文章设置</span></template
+        >
+        <el-menu-item
+          style="min-width: 63px; padding-left: 70px"
+          class="p"
+          index="/back/passageset/new"
+          >新文章</el-menu-item
+        >
+        <el-menu-item style="min-width: 63px; padding-left: 70px" class="p"
+          >分类管理</el-menu-item
+        >
+        <el-menu-item style="min-width: 63px; padding-left: 70px" class="p"
+          >文章列表</el-menu-item
+        ></el-sub-menu
       >
       <el-menu-item class="p" index="/back/friendset"
         ><el-icon><User /></el-icon
         ><template #title><span class="p">友链设置</span></template></el-menu-item
       >
-      <el-menu-item class="p" index="/back/etcset"
-        ><el-icon><Paperclip /></el-icon
-        ><template #title><span class="p">杂项</span></template></el-menu-item
-      >
+      <el-menu-item class="p" index="/back/etcset">
+        <el-icon><Paperclip /></el-icon>
+        <template #title><span class="p">杂项</span></template>
+      </el-menu-item>
     </el-menu>
     <el-main class="m">
       <el-scrollbar :max-height="height + 60 + 'px'">
@@ -84,7 +98,7 @@ export default {
       default: false,
     },
   },
-  deactivated() {
+  unmounted() {
     const q = document.getElementsByClassName("el-popper");
     setTimeout(() => {
       if (q.length > 0) {
@@ -95,7 +109,7 @@ export default {
       }
     }, 10);
   },
-  activated() {
+  mounted() {
     this.$emit("nomain");
     if (!this.logged) {
       this.$message.error({

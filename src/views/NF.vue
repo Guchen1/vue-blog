@@ -6,7 +6,7 @@
     style="text-align: center; display: table-cell; vertical-align: middle"
   >
     404 Not Found <br />
-    <div id="text4042">将在3秒后返回主页</div>
+    <div id="text4042">将在2秒后返回主页</div>
     <br /><br />
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
       width: document.body.clientWidth - 40,
       time: setTimeout(() => {
         this.$router.push("/");
-      }, 3000),
+      }, 2000),
     };
   },
   props: {
@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     //s() {},
+    // eslint-disable-next-line
 
     getwidth() {
       this.width = document.body.clientWidth - 40;

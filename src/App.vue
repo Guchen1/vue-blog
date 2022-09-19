@@ -98,7 +98,7 @@
           <RouterView v-slot="{ Component }">
             <template v-if="Component">
               <Transition name="el-fade-in-linear" mode="out-in">
-                <KeepAlive :key="11" exclude="PostShow">
+                <KeepAlive :key="11" exclude="PostShow,BackPage">
                   <component
                     @main="IsMain = true"
                     @login="login()"
@@ -122,7 +122,8 @@
           Copyright © 2022
           <a
             href="https://beian.miit.gov.cn/"
-            style="text-decoration: none; color: black; font-size: 12px"
+            style="text-decoration: none; font-size: 12px"
+            :style="{ color: Dark ? '#fff' : '#000' }"
             >苏ICP备2022031828号-1</a
           >
         </div>

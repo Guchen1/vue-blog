@@ -59,11 +59,17 @@ const routes = [{
                 component: () =>
                     import ("../views/BackPage/FriendSet.vue")
             }, {
-                name: "passageSet",
-                path: 'passageSet',
+                name: "passageset",
+                path: 'passageset',
                 // 单个router-view用：component
                 component: () =>
-                    import ("../views/BackPage/PassageSet.vue")
+                    import ("../views/BackPage/PassageSet.vue"),
+                children: [{
+                    path: "new",
+                    name: "new",
+                    component: () =>
+                        import ("../views/BackPage/PassageSet/NewP.vue")
+                }]
             },
             {
                 name: "etcset",

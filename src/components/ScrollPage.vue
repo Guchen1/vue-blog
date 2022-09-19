@@ -35,7 +35,8 @@
         Copyright © 2022
         <a
           href="https://beian.miit.gov.cn/"
-          style="text-decoration: none; color: black; font-size: 12px"
+          style="text-decoration: none; font-size: 12px"
+          :style="{ color: Dark ? '#fff' : '#000' }"
           >苏ICP备2022031828号-1</a
         >
       </div>
@@ -85,6 +86,10 @@ export default {
     img: {
       type: Array,
       default: () => [],
+    },
+    Dark: {
+      type: Boolean,
+      default: false,
     },
   },
   mounted() {

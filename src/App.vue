@@ -91,7 +91,11 @@
         <el-scrollbar
           ref="sc"
           :max-height="
-            IsMain ? height + 80 + 'px' : IsBack ? height + 140 + 'px' : height + 'px'
+            IsMain
+              ? height + 80 + 'px'
+              : IsBack || IsPost
+              ? height + 140 + 'px'
+              : height + 'px'
           "
           width="100%"
         >
@@ -105,6 +109,8 @@
                     :logged="logged"
                     @back="IsBack = true"
                     @changeq="change()"
+                    @post="IsPost = true"
+                    @nopost="IsPost = false"
                     :height="height + 80"
                     :is="Component"
                     :width="width"
@@ -117,17 +123,21 @@
             </template> </RouterView
         ></el-scrollbar>
       </el-main>
-      <el-footer v-if="!(IsMain || IsBack)"
-        ><div class="center1" style="text-align: center; line-height: 60px">
-          Copyright © 2022
-          <a
-            href="https://beian.miit.gov.cn/"
-            style="text-decoration: none; font-size: 12px"
-            :style="{ color: Dark ? '#fff' : '#000' }"
-            >苏ICP备2022031828号-1</a
-          >
-        </div>
-      </el-footer>
+      <transition name="el-zoom-in-bottom" mode="out-in">
+        <el-footer
+          v-if="!(IsBack || IsPost)"
+          :style="{ display: IsMain ? 'none' : 'block' }"
+          ><div class="center1" style="text-align: center; line-height: 60px">
+            Copyright © 2022
+            <a
+              href="https://beian.miit.gov.cn/"
+              style="text-decoration: none; font-size: 12px"
+              :style="{ color: Dark ? '#fff' : '#000' }"
+              >苏ICP备2022031828号-1</a
+            >
+          </div>
+        </el-footer>
+      </transition>
     </el-container>
     <OnClickOutside @trigger="CheckIsClosed()">
       <el-popover placement="top" :width="150" v-model:visible="popvisible">
@@ -207,7 +217,7 @@ export default {
     return {
       path: window.location.href,
       height: document.body.clientHeight - 140,
-      IsMain: false,
+      IsMain: window.location.pathname == "/" ? true : false,
       IsBack: false,
       width: 0,
       drawer: false,
@@ -218,7 +228,16 @@ export default {
       popvisible: false,
       out: 0,
       logged: false,
+      IsPost: false,
     };
+  },
+  beforeMount() {
+    if (this.$route.name == "doc-detail") {
+      this.IsPost = true;
+    }
+    if (this.$route.name == "home") {
+      this.IsMain = true;
+    }
   },
   methods: {
     login() {

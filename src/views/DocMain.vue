@@ -259,15 +259,13 @@ export default {
     }
   },
   activated() {
-    let a = () => {
-      if (this.$refs.scroll == undefined) {
-        setTimeout(a, 20);
-        return;
+    this.$nextTick(() => {
+      if (this.$refs.scroll != null && this.$refs.scroll.scrollTo != undefined) {
+        this.$refs.scroll.setScrollTop(this.nowscroll);
+        this.$refs.scroll.update();
       }
-      console.log(this.$refs.scroll);
-      this.$refs.scroll.setScrollTop(this.nowscroll);
-    };
-    setTimeout(a, 100);
+    });
+
     this.$emit("nomain");
     setTimeout(() => {
       if (document.getElementById("main") != null) {
@@ -280,6 +278,13 @@ export default {
     }, 300);
   },
   beforeRouteLeave(to, from, next) {
+    if (to.name == "home") {
+      this.$emit("home");
+      console.log("home");
+      this.$nextTick(next());
+
+      return;
+    }
     if (to.name == "doc-detail") {
       next();
       this.nowscroll = this.$refs.scroll.wrap$.scrollTop;

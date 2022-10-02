@@ -28,6 +28,9 @@ export default defineComponent({
   data() {
     return {};
   },
+  activated() {
+    this.$emit("nomain");
+  },
   computed: {
     links() {
       let a = this.$store.getters.getlinks;

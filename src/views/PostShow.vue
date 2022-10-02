@@ -1,24 +1,32 @@
 <template>
   <div style="position: relative; width: 100%">
-    <div
+    <el-page-header
+      :content="detail.title"
+      title="返回"
+      @back="$router.back()"
+      :style="{
+        'margin-left': width >= 1024 ? '15%' : '5%',
+        'margin-right': width >= 1024 ? '15%' : '5%',
+      }"
+    />
+    <div style="height: 20px"></div>
+    <el-scrollbar
+      :max-height="height - 120 + 'px'"
       v-if="loaded"
       :style="{
         width: width >= 1024 ? '70%' : '90%',
-        'min-height': height - 80 + 'px',
+        'min-height': height - 155 + 'px',
         display: ss ? 'none' : 'block',
       }"
       class="center"
       id="fix"
     >
-      <el-page-header :content="detail.title" title="返回" @back="$router.back()" />
-
-      <div style="height: 20px"></div>
       <c-editor
         :disabled="editorDisabled"
         :isDark="isDark"
         :maybeEditorData="editorData"
       ></c-editor>
-    </div>
+    </el-scrollbar>
     <LoadingPage :style="{ 'min-height': height - 80 + 'px' }" v-else />
   </div>
 </template>
@@ -32,12 +40,7 @@ export default {
     LoadingPage,
     CEditor,
   },
-  props: ["loading", "ready", "height", "path", "isDark"],
-  methods: {
-    a() {
-      this.width = window.innerWidth;
-    },
-  },
+  props: ["loading", "ready", "height", "path", "isDark", "width"],
 
   data() {
     return {
@@ -46,7 +49,6 @@ export default {
       editorDisabled: true,
       editorData: "",
       list: [],
-      width: window.innerWidth,
       detail: {},
       loaded: false,
     };
@@ -55,7 +57,9 @@ export default {
     this.loaded = false;
     next();
   },
+
   mounted() {
+    this.$emit("post");
     this.$emit("nomain");
     this.$axios
       .get(this.$server + "/passages?details=" + this.$route.params.id)
@@ -73,11 +77,10 @@ export default {
         if (this.$route.name == "doc-detail") this.$router.push("/404");
       });
 
-    window.addEventListener("resize", this.a);
     this.$emit("loaded");
   },
   unmounted() {
-    window.removeEventListener("resize", this.a);
+    this.$emit("nopost");
   },
 };
 </script>

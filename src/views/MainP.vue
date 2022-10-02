@@ -16,9 +16,6 @@ export default {
       img: [],
     };
   },
-  activated() {
-    this.$emit("main");
-  },
   props: {
     height: {
       type: Number,
